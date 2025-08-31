@@ -1,0 +1,10 @@
+{
+    "niveis":[
+        {
+            "id":1,
+            "nome": "Primeiro de muitos",
+            "dificuldade": "Fácil",
+            "estrutura": 1
+        }
+    ]
+}
