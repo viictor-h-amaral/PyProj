@@ -1,18 +1,20 @@
 import tkinter as tk
-from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout
+from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout, Centralizar_Janela
+import Sys.LevelDisplay as LDisplay 
 
 def principal():
     raiz = tk.Tk()
     raiz.title("Sistema Principal")
     raiz.geometry("800x600")
+    Centralizar_Janela(raiz)
     
     def ao_login_sucesso(dados_usuario):
         print(f"Usuário logado: {dados_usuario['usuario']}")
         print(f"Papel: {dados_usuario['papel']}")
+        raiz.deiconify()
         configurar_interface_principal(raiz)
-    
+
     Inicializar_Sistema_Login(raiz, ao_login_sucesso)
-    
     raiz.mainloop()
 
 def configurar_interface_principal(raiz):
@@ -47,7 +49,7 @@ def configurar_interface_admin(frame):
     label.pack(pady=20)
     
     tk.Button(frame, text="Gerenciar Usuários", width=20, height=2).pack(pady=5)
-    tk.Button(frame, text="Todos níveis", width=20, height=2).pack(pady=5)
+    tk.Button(frame, text="Acessar Nnveis", width=20, height=2).pack(pady=5)
     tk.Button(frame, text="Meus níveis", width=20, height=2).pack(pady=5)
     tk.Button(frame, text="Criar nível", width=20, height=2).pack(pady=5)
 
@@ -56,7 +58,8 @@ def configurar_interface_usuario(frame):
     label.pack(pady=20)
     
     tk.Button(frame, text="Conquistas", width=20, height=2).pack(pady=5)
-    tk.Button(frame, text="Níveis", width=20, height=2).pack(pady=5)
+    tk.Button(frame, text="Acessar níveis", width=20, height=2).pack(pady=5)
 
 if __name__ == "__main__":
+    LDisplay.Exibir_Nivel(1)
     principal()

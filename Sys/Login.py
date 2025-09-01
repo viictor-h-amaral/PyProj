@@ -13,11 +13,6 @@ def Inicializar_Sistema_Login(raiz, callback_sucesso):
     callback_login_sucesso = callback_sucesso
     Mostrar_Janela_Login(raiz)
 
-'''def obter_caminho_arquivo(nome_arquivo):
-    pasta_atual = Path(__file__).parent
-    pasta_raiz = pasta_atual.parent
-    return pasta_raiz / 'DB' / nome_arquivo'''
-
 def Garantir_Arquivo_Usuario_Existe():
     arquivo_usuario = crud.Obter_Caminho_Arquivo('Usuarios.json')
     if not arquivo_usuario.exists():
@@ -30,19 +25,6 @@ def Garantir_Arquivo_Usuario_Existe():
                 'papel': 'admin'
             }]
             json.dump(usuario_padrao, f, indent=4)
-
-'''def carregar_usuarios():
-    try:
-        arquivo_usuario = obter_caminho_arquivo('Usuarios.json')
-        with open(arquivo_usuario, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except:
-        return []'''
-
-'''def salvar_usuarios(usuarios):
-    arquivo_usuario = obter_caminho_arquivo('Usuarios.json')
-    with open(arquivo_usuario, 'w', encoding='utf-8') as f:
-        json.dump(usuarios, f, indent=4, ensure_ascii=False)'''
 
 def Validar_Credenciais(usuario, senha):
     usuarios = crud.Carregar_Usuarios()
@@ -163,7 +145,7 @@ def Centralizar_Janela(janela):
     altura = janela.winfo_height()
     x = (janela.winfo_screenwidth() // 2) - (largura // 2)
     y = (janela.winfo_screenheight() // 2) - (altura // 2)
-    janela.geometry(f"+{x}+{y}")
+    janela.geometry(f"{largura}x{altura}+{x}+{y}")
 
 def Cancelar_Login(raiz):
     global janela_login
@@ -172,14 +154,14 @@ def Cancelar_Login(raiz):
 
 def Mostrar_Janela_Login(raiz):
     global janela_login
-    
+    raiz.withdraw()
     Garantir_Arquivo_Usuario_Existe()
     
     janela_login = tk.Toplevel(raiz)
     janela_login.title("Login")
     janela_login.geometry("300x200")
     janela_login.resizable(False, False)
-    janela_login.transient(raiz)
+    #janela_login.transient(raiz)
     janela_login.grab_set()
     
     Centralizar_Janela(janela_login)

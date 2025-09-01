@@ -33,3 +33,10 @@ def Carregar_Usuarios():
 def Salvar_Usuarios(usuarios):
     with open(Obter_Caminho_Arquivo('Usuarios.json'), 'w', encoding='utf-8') as f:
         json.dump(usuarios, f, indent=4, ensure_ascii=False)
+
+def Buscar_Peca_Arquivo(peca_id):
+    with open(Obter_Caminho_Arquivo('Pecas.json'), 'r', encoding='utf-8') as f:
+        dados = json.load(f)
+
+    for peca in dados['pecas']:
+        if peca['id'] == peca_id: return peca['arquivo'] + '.png'
