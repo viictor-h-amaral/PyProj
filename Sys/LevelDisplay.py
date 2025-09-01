@@ -6,12 +6,14 @@ from PIL import Image, ImageTk
 Nivel = None
 Estrutura = None
 Matriz_Estrutural = None
+Pecas_Nivel = None
 
 def Exibir_Nivel(nivel_id):
 
     global Nivel
     global Estrutura
     global Matriz_Estrutural
+    global Pecas_Nivel
 
     Nivel = crud.Buscar_Nivel(nivel_id)
     Estrutura = crud.Buscar_Estrutura_Do_Nivel(nivel_id)
@@ -25,6 +27,7 @@ def Exibir_Nivel(nivel_id):
 
             peca_id = Matriz_Estrutural[indice_linha][indice_coluna]
             imagem_peca = Buscar_Imagem_Peca(peca_id)
+            Pecas_Nivel.append(imagem_peca)
 
             imagem_botao = tk.Button(janela_nivel, image=imagem_peca, 
                         command = lambda p_linha=indice_linha, p_coluna=indice_coluna: Clique_Peca(p_linha, p_coluna, peca_id))
