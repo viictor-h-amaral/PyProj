@@ -1,6 +1,7 @@
 import tkinter as tk
 from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout, Centralizar_Janela
-import Sys.LevelDisplay as LDisplay 
+import Sys.LevelDisplay as LDisplay
+import Sys.Crud as crud 
 
 def principal():
     raiz = tk.Tk()
@@ -49,7 +50,7 @@ def configurar_interface_admin(frame):
     label.pack(pady=20)
     
     tk.Button(frame, text="Gerenciar Usuários", width=20, height=2).pack(pady=5)
-    tk.Button(frame, text="Acessar Nnveis", width=20, height=2).pack(pady=5)
+    tk.Button(frame, text="Acessar Níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis()).pack(pady=5)
     tk.Button(frame, text="Meus níveis", width=20, height=2).pack(pady=5)
     tk.Button(frame, text="Criar nível", width=20, height=2).pack(pady=5)
 
@@ -58,8 +59,8 @@ def configurar_interface_usuario(frame):
     label.pack(pady=20)
     
     tk.Button(frame, text="Conquistas", width=20, height=2).pack(pady=5)
-    tk.Button(frame, text="Acessar níveis", width=20, height=2).pack(pady=5)
+    tk.Button(frame, text="Acessar níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis()).pack(pady=5)
+
 
 if __name__ == "__main__":
-    LDisplay.Exibir_Nivel(1)
     principal()

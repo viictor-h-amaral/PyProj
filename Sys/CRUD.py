@@ -8,6 +8,12 @@ def Obter_Caminho_Arquivo(nome_arquivo):
     db_path = raiz_projeto / 'DB' / nome_arquivo
     return db_path
 
+def Buscar_Niveis():
+    with open(Obter_Caminho_Arquivo('Niveis.json'), 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
+
+    return dados['niveis']
+
 def Buscar_Nivel(nivel_id):
     with open(Obter_Caminho_Arquivo('Niveis.json'), 'r', encoding='utf-8') as arquivo_json:
         dados = json.load(arquivo_json)
