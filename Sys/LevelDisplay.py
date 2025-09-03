@@ -6,7 +6,6 @@ from PIL import Image, ImageTk
 Nivel = None
 Estrutura = None
 Matriz_Estrutural = None
-Pecas_Nivel = []
 controle_niveis_exibidos = [0, 10]
 
 def Exibir_Nivel(nivel_id):
@@ -14,20 +13,21 @@ def Exibir_Nivel(nivel_id):
     global Nivel
     global Estrutura
     global Matriz_Estrutural
-    global Pecas_Nivel
 
     Nivel = crud.Buscar_Nivel(nivel_id)
     Estrutura = crud.Buscar_Estrutura_Do_Nivel(nivel_id)
     Matriz_Estrutural = Estrutura["matriz_pecas"]
     
-    janela_nivel = tk.Tk()
+    janela_nivel = tk.Toplevel()
+    janela_nivel.referencias_imagens = []
 
     for indice_linha, linha in enumerate(Matriz_Estrutural):
         for indice_coluna, coluna in enumerate(Matriz_Estrutural):
 
             peca_id = Matriz_Estrutural[indice_linha][indice_coluna]
             imagem_peca = Buscar_Imagem_Peca(peca_id)
-            Pecas_Nivel.append(imagem_peca)
+
+            janela_nivel.referencias_imagens.append(imagem_peca)
 
             imagem_botao = tk.Button(janela_nivel, image=imagem_peca, 
                         command = lambda p_linha=indice_linha, p_coluna=indice_coluna: Clique_Peca(p_linha, p_coluna, peca_id))
@@ -55,7 +55,7 @@ def Clique_Peca(linha, coluna, peca_id):
 
 def Gerar_Pagina_Niveis():
 
-    pagina = tk.Tk()
+    pagina = tk.Toplevel()
     pagina.title("Níveis")
     pagina.geometry("800x400")
 
@@ -84,29 +84,6 @@ def Gerar_Pagina_Niveis():
     botao_avancar.pack(fill='x', pady=5, expand=True)
 
     Limpar_Exibir_Botoes_Niveis(frame_niveis_superior, frame_niveis_inferior)
-
-    '''for i in range(5):
-        frame_niveis_superior.columnconfigure(i, weight=1)
-        frame_niveis_inferior.columnconfigure(i, weight=1)
-
-    botoes_no_frame_superior = 0
-    botoes_no_frame_inferior = 0
-
-    niveis = crud.Buscar_Niveis()[controle_niveis_exibidos[0]:controle_niveis_exibidos[1]]
-
-    for nivel in niveis:
-
-        if botoes_no_frame_superior < 5:
-            nivel_button = tk.Button(frame_niveis_superior, text=nivel['nome'], height=2)
-            nivel_button.grid(row=0, column=botoes_no_frame_superior, padx=10, pady=10, sticky='ew')
-            botoes_no_frame_superior += 1
-
-        elif botoes_no_frame_inferior < 5:
-            nivel_button = tk.Button(frame_niveis_inferior, text=nivel['nome'], height=2)
-            nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
-            botoes_no_frame_inferior += 1
-
-        else: break'''
 
     pagina.mainloop()
 
