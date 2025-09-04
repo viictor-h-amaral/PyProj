@@ -40,9 +40,26 @@ def Salvar_Usuarios(usuarios):
     with open(Obter_Caminho_Arquivo('Usuarios.json'), 'w', encoding='utf-8') as f:
         json.dump(usuarios, f, indent=4, ensure_ascii=False)
 
-def Buscar_Peca_Arquivo(peca_id):
-    with open(Obter_Caminho_Arquivo('Pecas.json'), 'r', encoding='utf-8') as f:
-        dados = json.load(f)
+def Buscar_Peca(peca_id):
+    with open(Obter_Caminho_Arquivo('Pecas.json'), 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
 
-    for peca in dados['pecas']:
-        if peca['id'] == peca_id: return peca['arquivo'] + '.png'
+    for dado in dados['pecas']:
+        if dado['id'] == peca_id: return dado
+
+def Buscar_Peca_Arquivo(peca_id):
+    peca = Buscar_Peca(peca_id)
+    return peca['arquivo'] + '.png'
+
+def Buscar_Grupo_Peca(peca_id):
+    peca = Buscar_Peca(peca_id)
+    grupo_id = peca['grupo_pecas']
+    grupo = Buscar_Grupo_Pecas_Por_Id(grupo_id)
+    return grupo
+
+def Buscar_Grupo_Pecas_Por_Id(grupo_id):
+    with open(Obter_Caminho_Arquivo('Grupos_Pecas.json'), 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
+
+    for dado in dados['grupos_pecas']:
+        if dado['id'] == grupo_id: return dado

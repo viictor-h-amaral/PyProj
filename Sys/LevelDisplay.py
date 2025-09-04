@@ -19,20 +19,26 @@ def Exibir_Nivel(nivel_id):
     Matriz_Estrutural = Estrutura["matriz_pecas"]
     
     janela_nivel = tk.Toplevel()
-    janela_nivel.referencias_imagens = []
+    janela_nivel.botoes_pecas = {}
+    janela_nivel.imagens_pecas_ids = {}
+    janela_nivel.imagens_pecas = []
 
     for indice_linha, linha in enumerate(Matriz_Estrutural):
         for indice_coluna, coluna in enumerate(Matriz_Estrutural):
 
             peca_id = Matriz_Estrutural[indice_linha][indice_coluna]
-            imagem_peca = Buscar_Imagem_Peca(peca_id)
+            janela_nivel.imagens_pecas_ids[(indice_linha, indice_coluna)] = peca_id
 
-            janela_nivel.referencias_imagens.append(imagem_peca)
+            imagem_peca = Buscar_Imagem_Peca(peca_id)
+            janela_nivel.imagens_pecas.append(imagem_peca)
 
             imagem_botao = tk.Button(janela_nivel, image=imagem_peca, 
-                        command = lambda p_linha=indice_linha, p_coluna=indice_coluna: Clique_Peca(p_linha, p_coluna, peca_id))
+                        command = lambda p_linha=indice_linha, p_coluna=indice_coluna: Clique_Peca((p_linha, p_coluna), janela_nivel))
 
             imagem_botao.grid(row=indice_linha, column=indice_coluna)
+
+            janela_nivel.botoes_pecas[(indice_linha, indice_coluna)] = imagem_botao
+
     janela_nivel.mainloop()
 
 def Buscar_Imagem_Peca(peca_id):
@@ -49,9 +55,30 @@ def Endereco_Imagem(arquivo_imagem):
     img_path = raiz_projeto / 'Imgs' / 'pecas' / arquivo_imagem
     return img_path
 
-def Clique_Peca(linha, coluna, peca_id):
-    print('clicou na peça')
+def Clique_Peca(coordenada, janela):
+    botao = janela.botoes_pecas.get(coordenada)
+    id_peca_atual = janela.imagens_pecas_ids[coordenada]
 
+    id_prox_peca = Buscar_Proxima_Peca_Grupo(id_peca_atual)
+    nova_imagem = Buscar_Imagem_Peca(id_prox_peca)
+
+    janela.imagens_pecas_ids[coordenada] = id_prox_peca
+    if nova_imagem not in janela.imagens_pecas:
+        janela.imagens_pecas.append(nova_imagem)
+
+    botao.config(image=nova_imagem)
+    botao.image = nova_imagem
+    #criar metodo que busca proxima imagem na ordem do grupo de imgs
+
+def Buscar_Proxima_Peca_Grupo(peca_id):
+    grupo_peca = crud.Buscar_Grupo_Peca(peca_id)
+    pecas_no_grupo = grupo_peca['pecas']
+    indice_peca_atual = pecas_no_grupo.index(peca_id)
+
+    indice_nova_peca = (indice_peca_atual + 1)%(len(pecas_no_grupo)) # y = (x+1) % comprimento_lista
+    id_nova_peca = pecas_no_grupo[indice_nova_peca]
+
+    return id_nova_peca
 
 def Gerar_Pagina_Niveis():
 
