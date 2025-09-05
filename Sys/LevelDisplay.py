@@ -8,6 +8,9 @@ Estrutura = None
 Matriz_Estrutural = None
 controle_niveis_exibidos = [0, 10]
 
+controle_meus_niveis_exibidos = [0, 10]
+Usuario_Atual = None
+
 def Exibir_Nivel(nivel_id):
 
     global Nivel
@@ -95,7 +98,6 @@ def Gerar_Pagina_Niveis():
     frame_botoes_avancar_recuar = tk.Frame(pagina)
     frame_botoes_avancar_recuar.pack(pady=20, fill='both', expand=True)
 
-
     frame_niveis_superior = tk.Frame(frame_niveis)
     frame_niveis_superior.pack(fill='x', pady=5, expand=True)
 
@@ -114,6 +116,42 @@ def Gerar_Pagina_Niveis():
 
     pagina.mainloop()
 
+def Gerar_Pagina_Meus_Niveis(usuario):
+    global Usuario_Atual
+    Usuario_Atual = usuario
+
+    pagina = tk.Toplevel()
+    pagina.title("Meus níveis")
+    pagina.geometry("800x400")
+
+    label = tk.Label(pagina, text="Meu níveis", font=("Arial", 16))
+    label.pack(pady=20)
+
+    frame_niveis = tk.Frame(pagina)
+    frame_niveis.pack(pady=20, fill='both', expand=True)
+
+    frame_botoes_avancar_recuar = tk.Frame(pagina)
+    frame_botoes_avancar_recuar.pack(pady=20, fill='both', expand=True)
+
+    frame_niveis_superior = tk.Frame(frame_niveis)
+    frame_niveis_superior.pack(fill='x', pady=5, expand=True)
+
+    frame_niveis_inferior = tk.Frame(frame_niveis)
+    frame_niveis_inferior.pack(fill='x', pady=5, expand=True)
+
+    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='blue', 
+                                        font=('Arial', 16), command=lambda: Recuar_Exibicao_Meus_Niveis(10, frame_niveis_superior, frame_niveis_inferior))
+    botao_recuar.pack(fill='x', pady=5, expand=True)
+
+    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='red', 
+                                        font=('Arial', 16), command=lambda: Avancar_Exibicao_Meus_Niveis(10, frame_niveis_superior, frame_niveis_inferior))
+    botao_avancar.pack(fill='x', pady=5, expand=True)
+
+    Limpar_Exibir_Botoes_Meus_Niveis(frame_niveis_superior, frame_niveis_inferior)
+
+    pagina.mainloop()
+
+
 def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf):
     for widget in frame_sup.winfo_children():
         widget.destroy()
@@ -128,7 +166,39 @@ def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf):
     botoes_no_frame_superior = 0
     botoes_no_frame_inferior = 0
 
-    niveis = crud.Buscar_Niveis()[controle_niveis_exibidos[0]:controle_niveis_exibidos[1]]
+    todos_niveis = crud.Buscar_Niveis()
+    niveis = todos_niveis[controle_niveis_exibidos[0]:controle_niveis_exibidos[1]]
+
+    for nivel in niveis:
+
+        if botoes_no_frame_superior < 5:
+            nivel_button = tk.Button(frame_sup, text=nivel['nome'], height=2, command=lambda p_nivelid = nivel['id']: Exibir_Nivel(p_nivelid))
+            nivel_button.grid(row=0, column=botoes_no_frame_superior, padx=10, pady=10, sticky='ew')
+            botoes_no_frame_superior += 1
+
+        elif botoes_no_frame_inferior < 5:
+            nivel_button = tk.Button(frame_inf, text=nivel['nome'], height=2, command=lambda p_nivelid = nivel['id']: Exibir_Nivel(p_nivelid))
+            nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
+            botoes_no_frame_inferior += 1
+
+        else: break
+
+def Limpar_Exibir_Botoes_Meus_Niveis(frame_sup, frame_inf):
+    for widget in frame_sup.winfo_children():
+        widget.destroy()
+
+    for widget in frame_inf.winfo_children():
+        widget.destroy()
+
+    for i in range(5):
+        frame_sup.columnconfigure(i, weight=1)
+        frame_inf.columnconfigure(i, weight=1)
+
+    botoes_no_frame_superior = 0
+    botoes_no_frame_inferior = 0
+
+    todos_niveis = crud.Buscar_Niveis_Do_Usuario(Usuario_Atual['usuario'])
+    niveis = todos_niveis[controle_meus_niveis_exibidos[0]:controle_meus_niveis_exibidos[1]]
 
     for nivel in niveis:
 
@@ -165,3 +235,25 @@ def Avancar_Exibicao_Niveis(quantidade_avancar, frame_sup, frame_inf):
     controle_niveis_exibidos[0] += quantidade_avancar
     controle_niveis_exibidos[1] += quantidade_avancar
     Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf)
+
+def Avancar_Exibicao_Meus_Niveis(quantidade_avancar, frame_sup, frame_inf):
+    global controle_meus_niveis_exibidos
+
+    quantidade_niveis_existente = len(crud.Buscar_Niveis_Do_Usuario(Usuario_Atual['usuario']))
+
+    quantidade_niveis_exibidos_nesse_momento = controle_meus_niveis_exibidos[1] - 1
+    if (quantidade_niveis_exibidos_nesse_momento + 1 > quantidade_niveis_existente):
+        return #exibir mensagem de aviso ou  no canto da tela mostrar x/x níveis
+
+    controle_meus_niveis_exibidos[0] += quantidade_avancar
+    controle_meus_niveis_exibidos[1] += quantidade_avancar
+    Limpar_Exibir_Botoes_Meus_Niveis(frame_sup, frame_inf)
+
+def Recuar_Exibicao_Meus_Niveis(quantidade_voltar, frame_sup, frame_inf):
+    global controle_meus_niveis_exibidos
+    if (controle_meus_niveis_exibidos[0] - quantidade_voltar < 0):
+        return
+
+    controle_meus_niveis_exibidos[0] -= quantidade_voltar
+    controle_meus_niveis_exibidos[1] -= quantidade_voltar
+    Limpar_Exibir_Botoes_Meus_Niveis(frame_sup, frame_inf)

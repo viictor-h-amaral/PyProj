@@ -21,6 +21,15 @@ def Buscar_Nivel(nivel_id):
     for dado in dados['niveis']:
         if dado['id'] == nivel_id: return dado
 
+def Buscar_Niveis_Do_Usuario(usuario):
+    with open(Obter_Caminho_Arquivo('Niveis.json'), 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
+
+    niveis_usuario = []
+    for dado in dados['niveis']:
+        if dado['criador'] == usuario : niveis_usuario.append(dado)
+    return niveis_usuario
+
 def Buscar_Estrutura(estrutura_id):
     with open(Obter_Caminho_Arquivo('Estruturas.json'), 'r', encoding='utf-8') as arquivo_json:
         dados = json.load(arquivo_json)

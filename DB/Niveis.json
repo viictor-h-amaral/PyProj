@@ -4,73 +4,85 @@
             "id":1,
             "nome": "Primeiro de muitos",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "admin"
         },
         {
             "id":2,
             "nome": "Primeiro de muitos2",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "admin"
         },
         {
             "id":3,
             "nome": "Primeiro de muitos3",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "admin"
         },
         {
             "id":4,
             "nome": "Primeiro de muitos4",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "admin"
         },
         {
             "id":5,
             "nome": "Primeiro de muitos5",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "admin"
         },
         {
             "id":6,
             "nome": "Primeiro de muitos6",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "admin"
         },
 		{
             "id":7,
             "nome": "Primeiro de muitos7",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "admin"
         },
         {
             "id":8,
             "nome": "Primeiro de muitos8",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": ""
         },
         {
             "id":9,
             "nome": "Primeiro de muitos9",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": ""
         },
         {
             "id":10,
             "nome": "Primeiro de muitos10",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": ""
         },
         {
             "id":11,
             "nome": "Primeiro de muitos11",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": ""
         },
         {
             "id":12,
             "nome": "Primeiro de muitos12",
             "dificuldade": "Fácil",
-            "estrutura": 1
+            "estrutura": 1,
+            "criador": "victor"
         }
     ]
 }

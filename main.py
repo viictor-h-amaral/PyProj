@@ -52,7 +52,7 @@ def configurar_interface_admin(frame):
     
     tk.Button(frame, text="Gerenciar Usuários", width=20, height=2, command=lambda: UDisplay.Gerar_Pagina_Gerenciamento_Usuarios()).pack(pady=5)
     tk.Button(frame, text="Acessar Níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis()).pack(pady=5)
-    tk.Button(frame, text="Meus níveis", width=20, height=2).pack(pady=5)
+    tk.Button(frame, text="Meus níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Meus_Niveis(Obter_Usuario_Atual())).pack(pady=5)
     tk.Button(frame, text="Criar nível", width=20, height=2).pack(pady=5)
 
 def configurar_interface_usuario(frame):
