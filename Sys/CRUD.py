@@ -36,6 +36,13 @@ def Carregar_Usuarios():
     with open(Obter_Caminho_Arquivo('Usuarios.json'), 'r', encoding='utf-8') as f:
         return json.load(f)
 
+def Carregar_Usuario(usuario):
+    with open(Obter_Caminho_Arquivo('Usuarios.json'), 'r', encoding='utf-8') as f:
+        dados = json.load(f)
+
+    for dado in dados:
+        if dado['usuario'] == usuario: return dado
+
 def Salvar_Usuarios(usuarios):
     with open(Obter_Caminho_Arquivo('Usuarios.json'), 'w', encoding='utf-8') as f:
         json.dump(usuarios, f, indent=4, ensure_ascii=False)

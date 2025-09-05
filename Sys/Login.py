@@ -28,7 +28,7 @@ def Garantir_Arquivo_Usuario_Existe():
 
 def Validar_Credenciais(usuario, senha):
     usuarios = crud.Carregar_Usuarios()
-    senha_codificada = codifier.Descodificar_Senha(senha)
+    senha_codificada = codifier.Codificar_Senha(senha)
     
     for user in usuarios:
         if user['usuario'] == usuario and user['senha'] == senha_codificada:
