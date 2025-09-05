@@ -41,22 +41,22 @@ def Gerar_Pagina_Gerenciamento_Usuarios():
     pagina.mainloop()
 
 def Recuar_Exibicao_Usuarios(quantidade_voltar, frame_sup, frame_inf):
-    global controle_niveis_exibidos
-    if (controle_niveis_exibidos[0] - quantidade_voltar < 0):
+    global controle_usuarios_exibidos
+    if (controle_usuarios_exibidos[0] - quantidade_voltar < 0):
         return
 
-    controle_niveis_exibidos[0] -= quantidade_voltar
-    controle_niveis_exibidos[1] -= quantidade_voltar
+    controle_usuarios_exibidos[0] -= quantidade_voltar
+    controle_usuarios_exibidos[1] -= quantidade_voltar
     Limpar_Exibir_Botoes_Usuarios(frame_sup, frame_inf)
 
 def Avancar_Exibicao_Usuarios(quantidade_avancar, frame_sup, frame_inf):
     global controle_usuarios_exibidos
 
-    controle_usuarios_exibidos = len(crud.Buscar_Niveis())
+    quantidade_usuarios_existente = len(crud.Carregar_Usuarios())
 
-    quantidade_niveis_exibidos_nesse_momento = controle_niveis_exibidos[1] - 1
-    if (quantidade_niveis_exibidos_nesse_momento + 1 > controle_usuarios_exibidos):
-        return #exibir mensagem de aviso ou  no canto da tela mostrar x/x níveis
+    quantidade_niveis_exibidos_nesse_momento = controle_usuarios_exibidos[1] - 1
+    if (quantidade_niveis_exibidos_nesse_momento + 1 > quantidade_usuarios_existente):
+        return
 
     controle_usuarios_exibidos[0] += quantidade_avancar
     controle_usuarios_exibidos[1] += quantidade_avancar

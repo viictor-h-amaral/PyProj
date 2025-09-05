@@ -155,7 +155,7 @@ def Avancar_Exibicao_Niveis(quantidade_avancar, frame_sup, frame_inf):
 
     quantidade_niveis_exibidos_nesse_momento = controle_niveis_exibidos[1] - 1
     if (quantidade_niveis_exibidos_nesse_momento + 1 > quantidade_niveis_existente):
-        return #exibir mensagem de aviso ou  no canto da tela mostrar x/x níveis
+        return
 
     controle_niveis_exibidos[0] += quantidade_avancar
     controle_niveis_exibidos[1] += quantidade_avancar
@@ -270,7 +270,7 @@ def Avancar_Exibicao_Meus_Niveis(quantidade_avancar, frame_sup, frame_inf):
 
     quantidade_niveis_exibidos_nesse_momento = controle_meus_niveis_exibidos[1] - 1
     if (quantidade_niveis_exibidos_nesse_momento + 1 > quantidade_niveis_existente):
-        return #exibir mensagem de aviso ou  no canto da tela mostrar x/x níveis
+        return
 
     controle_meus_niveis_exibidos[0] += quantidade_avancar
     controle_meus_niveis_exibidos[1] += quantidade_avancar
