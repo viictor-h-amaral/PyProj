@@ -4,6 +4,8 @@ import Sys.LevelRunner as LRunner
 import tkinter as tk
 from PIL import Image, ImageTk
 
+#region VARS_GLOBAIS
+
 Nivel = None
 Estrutura = None
 Matriz_Estrutural = None
@@ -12,6 +14,7 @@ controle_niveis_exibidos = [0, 10]
 controle_meus_niveis_exibidos = [0, 10]
 Usuario_Atual = None
 
+#endregion VARS_GLOBAIS
 
 #region NIVEIS
 
@@ -25,7 +28,31 @@ def Exibir_Nivel(nivel_id):
     Estrutura = crud.Buscar_Estrutura_Do_Nivel(nivel_id)
     Matriz_Estrutural = Estrutura["matriz_pecas"]
     
-    janela_nivel = tk.Toplevel()
+    raiz = tk.Toplevel()
+
+    raiz.rowconfigure(0, weight=1)
+
+    for i in range(2):
+        raiz.columnconfigure(i, weight=1)
+
+    frame_esquerda = tk.Frame(raiz)
+    janela_nivel = tk.Frame(raiz)
+    frame_direita = tk.Frame(raiz)
+
+    frame_esquerda.grid(row=0, column=0, sticky='nsew')
+    janela_nivel.grid(row=0, column=1, sticky='nsew')
+    frame_direita.grid(row=0, column=2, sticky='nsew')
+
+    frame_esquerda.columnconfigure(0, weight=1)
+    frame_direita.columnconfigure(0, weight=1)
+
+    for i in range(len(Matriz_Estrutural)):
+        frame_esquerda.rowconfigure(i, weight=1)
+        frame_direita.rowconfigure(i, weight=1)
+
+    tk.Label(frame_esquerda, text="Início", font=("Arial", 16)).grid(column=0, row=(len(Matriz_Estrutural) - 1), sticky='s', pady=10)
+    tk.Label(frame_direita, text="Fim", font=("Arial", 16)).grid(column=0, row=0, sticky='n', pady=10)
+
     janela_nivel.botoes_pecas = {}
     janela_nivel.imagens_pecas_ids = {}
     janela_nivel.imagens_pecas = []
@@ -37,7 +64,7 @@ def Exibir_Nivel(nivel_id):
             janela_nivel.imagens_pecas_ids[(indice_linha, indice_coluna)] = peca_id
 
             imagem_peca = LRunner.Buscar_Imagem_Peca(peca_id)
-            janela_nivel.imagens_pecas.append(imagem_peca)
+            if imagem_peca not in janela_nivel.imagens_pecas: janela_nivel.imagens_pecas.append(imagem_peca)
 
             imagem_botao = tk.Button(janela_nivel, image=imagem_peca, 
                         command = lambda p_linha=indice_linha, p_coluna=indice_coluna: LRunner.Clique_Peca((p_linha, p_coluna), janela_nivel))
@@ -46,7 +73,7 @@ def Exibir_Nivel(nivel_id):
 
             janela_nivel.botoes_pecas[(indice_linha, indice_coluna)] = imagem_botao
 
-    janela_nivel.mainloop()
+    raiz.mainloop()
 
 def Gerar_Pagina_Niveis():
 

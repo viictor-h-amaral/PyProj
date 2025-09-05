@@ -2,7 +2,6 @@ import tkinter as tk
 from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout, Centralizar_Janela
 import Sys.LevelDisplay as LDisplay
 import Sys.UsersDisplay as UDisplay
-import Sys.Crud as crud 
 
 def principal():
     raiz = tk.Tk()
