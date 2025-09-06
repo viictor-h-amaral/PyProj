@@ -67,13 +67,18 @@ def Exibir_Nivel(nivel_id):
             if imagem_peca not in janela_nivel.imagens_pecas: janela_nivel.imagens_pecas.append(imagem_peca)
 
             imagem_botao = tk.Button(janela_nivel, image=imagem_peca, 
-                        command = lambda p_linha=indice_linha, p_coluna=indice_coluna: LRunner.Clique_Peca((p_linha, p_coluna), janela_nivel))
+                        command = lambda p_linha=indice_linha, p_coluna=indice_coluna: Rotina_Clique_Peca((p_linha, p_coluna), janela_nivel, Matriz_Estrutural))
 
             imagem_botao.grid(row=indice_linha, column=indice_coluna)
 
             janela_nivel.botoes_pecas[(indice_linha, indice_coluna)] = imagem_botao
 
     raiz.mainloop()
+
+def Rotina_Clique_Peca(coordenada, janela_nivel, matriz_estrutural):
+    LRunner.Atualizar_Peca(coordenada, janela_nivel)
+    if LRunner.Rotina_Verifica_Nivel_Valido(matriz_estrutural): 
+        x = 2
 
 def Gerar_Pagina_Niveis():
 
