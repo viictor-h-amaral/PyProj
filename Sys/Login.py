@@ -45,7 +45,8 @@ def Criar_Novo_Usuario(usuario, senha, papel):
         'id': len(usuarios) + 1,
         'usuario': usuario,
         'senha': codifier.Codificar_Senha(senha),
-        'papel': papel
+        'papel': papel,
+        'niveis_concluidos': []
     }
     
     usuarios.append(novo_usuario)
@@ -189,6 +190,9 @@ def Mostrar_Janela_Login(raiz):
 
 def Obter_Usuario_Atual():
     return usuario_atual
+
+def Atualizar_Usuario_Atual():
+    return crud.Carregar_Usuario(usuario_atual['usuario'])
 
 def Fazer_Logout(raiz, callback_logout=None):
     global usuario_atual, janela_login

@@ -86,7 +86,7 @@ def Limpar_Exibir_Botoes_Usuarios(frame_sup, frame_inf):
             botoes_no_frame_superior += 1
 
         elif botoes_no_frame_inferior < 5:
-            nivel_button = tk.Button(frame_inf, text=usuario['usuario'], height=2, command=lambda p_user = usuario['usuario']: Exibir_Alterar_Usuario(p_user))
+            nivel_button = tk.Button(frame_inf, text=usuario['usuario'], height=2, command=lambda p_user = usuario['id']: Exibir_Alterar_Usuario(p_user))
             nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_inferior += 1
 

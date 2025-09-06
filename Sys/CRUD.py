@@ -79,3 +79,14 @@ def Buscar_Grupo_Pecas_Por_Id(grupo_id):
 
     for dado in dados['grupos_pecas']:
         if dado['id'] == grupo_id: return dado
+
+def Salvar_Nivel_Concluido(usuario, nivel):
+    usuarios = Carregar_Usuarios()
+    usuarios_atualizados = []
+    for user in usuarios:
+        if user['usuario'] == usuario['usuario']: user['niveis_concluidos'].append(nivel['id'])
+        usuarios_atualizados.append(user)
+    Salvar_Usuarios(usuarios_atualizados)
+
+def Retornar_Se_Nivel_Concluido(usuario, nivel_id):
+    return (nivel_id in usuario['niveis_concluidos'])

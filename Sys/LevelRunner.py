@@ -3,6 +3,7 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from pathlib import Path
 import copy
+import random
 
 def Buscar_Proxima_Peca_Grupo(peca_id):
     grupo_peca = crud.Buscar_Grupo_Peca(peca_id)
@@ -33,7 +34,7 @@ def Buscar_Imagem_Peca(peca_id):
     end_img = Endereco_Imagem(arquivo_img)
 
     img = Image.open(end_img)
-    img = img.resize((50,50))
+    img = img.resize((60,60), Image.Resampling.LANCZOS)
     return ImageTk.PhotoImage(img)
 
 def Endereco_Imagem(arquivo_imagem):
@@ -200,6 +201,18 @@ def Coordenada_Peca_Final(matriz):
     coluna = len(matriz[0]) - 1
     return (0, coluna)
 
+def Embaralhar_Pecas(matriz):
+    matriz_embaralhada = copy.deepcopy(matriz)
+    for indice_linha, linha in enumerate(matriz):
+        for indice_coluna, coluna in enumerate(linha):
+
+            peca_original_id = matriz[indice_linha][indice_coluna]
+            grupo_peca = crud.Buscar_Grupo_Peca(peca_original_id)
+            pecas_no_grupo = grupo_peca['pecas']
+
+            matriz_embaralhada[indice_linha][indice_coluna] = random.choice(pecas_no_grupo)
+
+    return matriz_embaralhada
 
 def Run_Tests():
     matriz1 = [[13, 23],
