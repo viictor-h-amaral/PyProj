@@ -2,7 +2,8 @@ from pathlib import Path
 import Sys.Crud as crud
 import Sys.LevelRunner as LRunner
 import tkinter as tk
-from PIL import Image, ImageTk
+from tkinter import messagebox
+import copy
 
 #region VARS_GLOBAIS
 
@@ -14,6 +15,8 @@ controle_niveis_exibidos = [0, 10]
 controle_meus_niveis_exibidos = [0, 10]
 Usuario_Atual = None
 
+Nivel_Atual_Concluido = False
+
 #endregion VARS_GLOBAIS
 
 #region NIVEIS
@@ -23,6 +26,7 @@ def Exibir_Nivel(nivel_id):
     global Nivel
     global Estrutura
     global Matriz_Estrutural
+    global Nivel_Atual_Concluido
 
     Nivel = crud.Buscar_Nivel(nivel_id)
     Estrutura = crud.Buscar_Estrutura_Do_Nivel(nivel_id)
@@ -54,31 +58,40 @@ def Exibir_Nivel(nivel_id):
     tk.Label(frame_direita, text="Fim", font=("Arial", 16)).grid(column=0, row=0, sticky='n', pady=10)
 
     janela_nivel.botoes_pecas = {}
-    janela_nivel.imagens_pecas_ids = {}
+    janela_nivel.pecas_ids = []
     janela_nivel.imagens_pecas = []
 
     for indice_linha, linha in enumerate(Matriz_Estrutural):
         for indice_coluna, coluna in enumerate(Matriz_Estrutural):
 
             peca_id = Matriz_Estrutural[indice_linha][indice_coluna]
-            janela_nivel.imagens_pecas_ids[(indice_linha, indice_coluna)] = peca_id
+            janela_nivel.pecas_ids = copy.deepcopy(Matriz_Estrutural)
 
             imagem_peca = LRunner.Buscar_Imagem_Peca(peca_id)
             if imagem_peca not in janela_nivel.imagens_pecas: janela_nivel.imagens_pecas.append(imagem_peca)
 
             imagem_botao = tk.Button(janela_nivel, image=imagem_peca, 
-                        command = lambda p_linha=indice_linha, p_coluna=indice_coluna: Rotina_Clique_Peca((p_linha, p_coluna), janela_nivel, Matriz_Estrutural))
+                        command = lambda p_linha=indice_linha, p_coluna=indice_coluna: Rotina_Clique_Peca((p_linha, p_coluna), janela_nivel))
 
             imagem_botao.grid(row=indice_linha, column=indice_coluna)
 
             janela_nivel.botoes_pecas[(indice_linha, indice_coluna)] = imagem_botao
 
+    Nivel_Atual_Concluido = LRunner.Rotina_Verifica_Nivel_Valido(Matriz_Estrutural)
     raiz.mainloop()
 
-def Rotina_Clique_Peca(coordenada, janela_nivel, matriz_estrutural):
+def Rotina_Clique_Peca(coordenada, janela_nivel):
     LRunner.Atualizar_Peca(coordenada, janela_nivel)
-    if LRunner.Rotina_Verifica_Nivel_Valido(matriz_estrutural): 
-        x = 2
+    Rotina_Valida_Nivel(janela_nivel.pecas_ids)
+    
+def Rotina_Valida_Nivel(matriz):
+    global Nivel_Atual_Concluido
+
+    nivel_concluido = LRunner.Rotina_Verifica_Nivel_Valido(matriz)
+    if nivel_concluido: 
+        if (not Nivel_Atual_Concluido) : messagebox.showinfo("Sucesso", "Nível concluído!")
+        Nivel_Atual_Concluido = True
+    else: Nivel_Atual_Concluido = False
 
 def Gerar_Pagina_Niveis():
 
@@ -182,14 +195,14 @@ def Exibir_Meu_Nivel(nivel_id):
     
     janela_nivel = tk.Toplevel()
     janela_nivel.botoes_pecas = {}
-    janela_nivel.imagens_pecas_ids = {}
+    janela_nivel.pecas_ids = {}
     janela_nivel.imagens_pecas = []
 
     for indice_linha, linha in enumerate(Matriz_Estrutural):
         for indice_coluna, coluna in enumerate(Matriz_Estrutural):
 
             peca_id = Matriz_Estrutural[indice_linha][indice_coluna]
-            janela_nivel.imagens_pecas_ids[(indice_linha, indice_coluna)] = peca_id
+            janela_nivel.pecas_ids[(indice_linha, indice_coluna)] = peca_id
 
             imagem_peca = LRunner.Buscar_Imagem_Peca(peca_id)
             janela_nivel.imagens_pecas.append(imagem_peca)

@@ -1,4 +1,4 @@
-import Crud as crud
+import Sys.Crud as crud
 import tkinter as tk
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -16,12 +16,12 @@ def Buscar_Proxima_Peca_Grupo(peca_id):
 
 def Atualizar_Peca(coordenada, janela):
     botao = janela.botoes_pecas.get(coordenada)
-    id_peca_atual = janela.imagens_pecas_ids[coordenada]
+    id_peca_atual = janela.pecas_ids[coordenada[0]][coordenada[1]]
 
     id_prox_peca = Buscar_Proxima_Peca_Grupo(id_peca_atual)
     nova_imagem = Buscar_Imagem_Peca(id_prox_peca)
 
-    janela.imagens_pecas_ids[coordenada] = id_prox_peca
+    janela.pecas_ids[coordenada[0]][coordenada[1]] = id_prox_peca
     if nova_imagem not in janela.imagens_pecas:
         janela.imagens_pecas.append(nova_imagem)
 
@@ -56,16 +56,49 @@ def Valida_Nivel(matriz, coordenadas_peca_atual, pecas_seq_previa):
     pecas_seq_atual = pecas_seq_previa + [coordenadas_peca_atual]
 
     if len(lista_proximas_pecas) == 0:
-        if coordenadas_peca_atual == Coordenada_Peca_Final(matriz)  : return (True, pecas_seq_atual)
-        elif len(pecas_seq_atual) == 1                              : return False
-        else                                                        : return None
+        if coordenadas_peca_atual == Coordenada_Peca_Final(matriz)      : return (True, pecas_seq_atual)
+        elif coordenadas_peca_atual == Coordenada_Peca_Inicial(matriz)  : return False
+        else                                                            : return None
 
     for peca in lista_proximas_pecas:
         validado = Valida_Nivel(matriz, peca, copy.deepcopy(pecas_seq_atual))
         if (validado is not None) : return validado
 
-    if len(pecas_seq_atual) == 1:
+    if coordenadas_peca_atual == Coordenada_Peca_Inicial(matriz):
         return False
+
+''' DEEPSEEK
+def Valida_Nivel2(matriz, coordenadas_peca_atual, pecas_seq_previa):
+    # Adiciona a peça atual ao caminho (modifica a lista original)
+    pecas_seq_previa.append(coordenadas_peca_atual)
+    
+    # Verifica se chegou ao final
+    if coordenadas_peca_atual == Coordenada_Peca_Final(matriz):
+        return (True, pecas_seq_previa.copy())
+    
+    lista_proximas_pecas = []
+
+    # Verifica todas as direções
+    direcoes = [
+        (Peca_Acima_Eh_Valida, Peca_Acima),
+        (Peca_Abaixo_Eh_Valida, Peca_Abaixo),
+        (Peca_A_Esquerda_Eh_Valida, Peca_A_Esquerda),
+        (Peca_A_Direita_Eh_Valida, Peca_A_Direita)
+    ]
+    
+    for validacao, movimento in direcoes:
+        if validacao(matriz, coordenadas_peca_atual, pecas_seq_previa):
+            lista_proximas_pecas.append(movimento(coordenadas_peca_atual))
+
+    # Explora cada direção válida
+    for peca in lista_proximas_pecas:
+        resultado = Valida_Nivel(matriz, peca, pecas_seq_previa)
+        if resultado is not None:
+            return resultado
+
+    # Backtrack: remove a peça atual antes de retornar
+    pecas_seq_previa.pop()
+    return None'''
 
 def Peca_Acima_Eh_Valida(matriz, coordenadas_peca_atual, pecas_seq_atual):
     coordenadas_peca_acima = Peca_Acima(coordenadas_peca_atual)
@@ -169,10 +202,23 @@ def Coordenada_Peca_Final(matriz):
 
 
 def Run_Tests():
-    matriz1 = crud.Buscar_Estrutura_Do_Nivel(1)['matriz_pecas']
-    matriz2 = crud.Buscar_Estrutura_Do_Nivel(2)['matriz_pecas']
-    matriz3 = crud.Buscar_Estrutura_Do_Nivel(3)['matriz_pecas']
-    matriz4 = crud.Buscar_Estrutura_Do_Nivel(4)['matriz_pecas']
+    matriz1 = [[13, 23],
+               [26, 41]]
+
+    matriz2 = [[23, 22, 22, 22],
+                [21, 23, 14, 0],
+                [21, 34, 14, 0],
+                [26, 33, 14, 0]]
+
+    matriz3 = [[23, 22, 0, 22],
+               [21, 23, 14, 0],
+               [21, 34, 14, 0],
+               [26, 33, 14, 0]]
+
+    matriz4 = [[23, 21, 0, 22],
+               [22, 26, 13, 0],
+               [22, 33, 13, 0],
+               [25, 32, 13, 0]]
 
     print(f'Valor esperado: TRUE. Valor obtido: {Rotina_Verifica_Nivel_Valido(matriz1)}')
     print(f'Valor esperado: TRUE. Valor obtido: {Rotina_Verifica_Nivel_Valido(matriz2)}')

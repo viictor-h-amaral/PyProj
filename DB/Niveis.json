@@ -11,21 +11,21 @@
             "id":2,
             "nome": "Primeiro de muitos2",
             "dificuldade": "Fácil",
-            "estrutura": 1,
+            "estrutura": 2,
             "criador": "admin"
         },
         {
             "id":3,
             "nome": "Primeiro de muitos3",
             "dificuldade": "Fácil",
-            "estrutura": 1,
+            "estrutura": 3,
             "criador": "admin"
         },
         {
             "id":4,
             "nome": "Primeiro de muitos4",
             "dificuldade": "Fácil",
-            "estrutura": 1,
+            "estrutura": 4,
             "criador": "admin"
         },
         {
