@@ -17,24 +17,55 @@ def Buscar_Proxima_Peca_Grupo(peca_id):
 
 def Atualizar_Peca(coordenada, janela):
     botao = janela.botoes_pecas.get(coordenada)
+    if not botao:
+        return
+        
     id_peca_atual = janela.pecas_ids[coordenada[0]][coordenada[1]]
-
     id_prox_peca = Buscar_Proxima_Peca_Grupo(id_peca_atual)
-    nova_imagem = Buscar_Imagem_Peca(id_prox_peca)
-
+    
+    # Obtém o tamanho atual da imagem do botão
+    if hasattr(botao, 'image') and botao.image:
+        # Usa o mesmo tamanho da imagem atual
+        tamanho_atual = (botao.image.width(), botao.image.height())
+        nova_imagem = Buscar_Imagem_Peca(id_prox_peca, tamanho_atual)
+    else:
+        # Se não tem imagem, usa tamanho padrão (fallback)
+        nova_imagem = Buscar_Imagem_Peca(id_prox_peca)
+    
+    # Atualiza o ID da peça
     janela.pecas_ids[coordenada[0]][coordenada[1]] = id_prox_peca
+    
+    # Atualiza a imagem
+    botao.config(image=nova_imagem)
+    botao.image = nova_imagem
+    
+    # Adiciona à lista de imagens se não estiver lá
     if nova_imagem not in janela.imagens_pecas:
         janela.imagens_pecas.append(nova_imagem)
 
-    botao.config(image=nova_imagem)
-    botao.image = nova_imagem
+def Buscar_Imagem_Peca_Redimensionada(peca_id, tamanho):
+    """
+    Versão modificada da Buscar_Imagem_Peca que aceita tamanho personalizado
+    """
+    arquivo_img = crud.Buscar_Peca_Arquivo(peca_id)
+    end_img = Endereco_Imagem(arquivo_img)
+    
+    img = Image.open(end_img)
+    img = img.resize((tamanho, tamanho), Image.Resampling.LANCZOS)
+    return ImageTk.PhotoImage(img)
 
-def Buscar_Imagem_Peca(peca_id):
+def Buscar_Imagem_Peca(peca_id, tamanho=None):
     arquivo_img = crud.Buscar_Peca_Arquivo(peca_id)
     end_img = Endereco_Imagem(arquivo_img)
 
     img = Image.open(end_img)
-    img = img.resize((60,60), Image.Resampling.LANCZOS)
+    
+    # Se não especificar tamanho, usa tamanho padrão de 80x80
+    if tamanho is None:
+        img = img.resize((80, 80), Image.Resampling.LANCZOS)
+    else:
+        img = img.resize(tamanho, Image.Resampling.LANCZOS)
+    
     return ImageTk.PhotoImage(img)
 
 def Endereco_Imagem(arquivo_imagem):
