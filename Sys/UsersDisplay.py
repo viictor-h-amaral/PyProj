@@ -31,11 +31,11 @@ def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
     frame_usuarios_inferior = tk.Frame(frame_usuarios)
     frame_usuarios_inferior.pack(fill='x', pady=5, expand=True)
 
-    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='blue', 
+    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='#3b68ff', 
                                         font=('Arial', 16), command=lambda: Recuar_Exibicao_Usuarios(10, frame_usuarios_superior, frame_usuarios_inferior))
     botao_recuar.pack(fill='x', pady=5, expand=True)
 
-    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='red', 
+    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='#ff3b3b', 
                                         font=('Arial', 16), command=lambda: Avancar_Exibicao_Usuarios(10, frame_usuarios_superior, frame_usuarios_inferior))
     botao_avancar.pack(fill='x', pady=5, expand=True)
 

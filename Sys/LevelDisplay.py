@@ -181,7 +181,7 @@ def Exibir_Nivel_Incompleto(nivel_id, pagina):
             altura_botao = primeiro_botao.winfo_height()
             
             # Usa o menor lado para manter aspecto quadrado, mas subtrai um pouco para margem
-            tamanho_imagem = min(largura_botao, altura_botao) - 4  # -4 pixels para margem
+            tamanho_imagem = min(largura_botao, altura_botao) - 2  # -4 pixels para margem
             
             for (linha, coluna), botao in janela_nivel.botoes_pecas.items():
                 peca_id = janela_nivel.pecas_ids[linha][coluna]
@@ -264,11 +264,11 @@ def Gerar_Pagina_Niveis(raiz):
     frame_niveis_inferior = tk.Frame(frame_niveis)
     frame_niveis_inferior.pack(fill='x', pady=5, expand=True)
 
-    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='blue', 
+    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='#3b68ff', 
                                         font=('Arial', 16), command=lambda: Recuar_Exibicao_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
     botao_recuar.pack(fill='x', pady=5, expand=True)
 
-    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='red', 
+    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='#ff3b3b', 
                                         font=('Arial', 16), command=lambda: Avancar_Exibicao_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
     botao_avancar.pack(fill='x', pady=5, expand=True)
 
@@ -294,16 +294,25 @@ def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, janela_niveis):
     niveis = todos_niveis[controle_niveis_exibidos[0]:controle_niveis_exibidos[1]]
 
     for nivel in niveis:
+        bg = 'white'
+        fg = 'black'
+        match (nivel['dificuldade'].upper()):
+            case 'FACIL': bg = '#a3ffa8' 
+            case 'MEDIO': bg = '#fcffa3'
+            case 'DIFICIL': bg = '#ff8787'
+
         if botoes_no_frame_superior < 5:
-            nivel_button = tk.Button(frame_sup, text=nivel['nome'], height=2, 
+            nivel_button = tk.Button(frame_sup, text=nivel['nome'], height=2, bg = bg, fg=fg, font=('Arial', 9, 'bold'),
                                    command=lambda p_nivelid=nivel['id']: Exibir_Nivel(p_nivelid, janela_niveis))
             nivel_button.grid(row=0, column=botoes_no_frame_superior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_superior += 1
+
         elif botoes_no_frame_inferior < 5:
-            nivel_button = tk.Button(frame_inf, text=nivel['nome'], height=2, 
+            nivel_button = tk.Button(frame_inf, text=nivel['nome'], height=2, bg = bg, fg=fg, font=('Arial', 9, 'bold'),
                                    command=lambda p_nivelid=nivel['id']: Exibir_Nivel(p_nivelid, janela_niveis))
             nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_inferior += 1
+
         else: 
             break
 
