@@ -1,6 +1,7 @@
 import tkinter as tk
 from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout, Centralizar_Janela
 import Sys.LevelDisplay as LDisplay
+import Sys.MyLevelsDisplay as MLDisplay
 import Sys.UsersDisplay as UDisplay
 
 def principal():
@@ -40,19 +41,20 @@ def configurar_interface_principal(raiz):
     frame_conteudo.pack(expand=True, fill='both', padx=20, pady=20)
     
     if usuario_atual['papel'] == 'admin':
-        configurar_interface_admin(frame_conteudo)
+        configurar_interface_admin(frame_conteudo, raiz)
     else:
         configurar_interface_usuario(frame_conteudo)
 
-def configurar_interface_admin(frame):
+def configurar_interface_admin(frame, pagina):
 
     label = tk.Label(frame, text="Painel Administrativo", font=("Arial", 16))
     label.pack(pady=20)
     
-    tk.Button(frame, text="Gerenciar Usuários", width=20, height=2, command=lambda: UDisplay.Gerar_Pagina_Gerenciamento_Usuarios()).pack(pady=5)
-    tk.Button(frame, text="Acessar Níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis()).pack(pady=5)
-    tk.Button(frame, text="Meus níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Meus_Niveis()).pack(pady=5)
+    tk.Button(frame, text="Gerenciar Usuários", width=20, height=2, command=lambda: UDisplay.Gerar_Pagina_Gerenciamento_Usuarios(pagina)).pack(pady=5)
+    tk.Button(frame, text="Acessar Níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis(pagina)).pack(pady=5)
+    tk.Button(frame, text="Meus níveis", width=20, height=2, command=lambda: MLDisplay.Gerar_Pagina_Meus_Niveis(pagina)).pack(pady=5)
     tk.Button(frame, text="Criar nível", width=20, height=2).pack(pady=5)
+   
 
 def configurar_interface_usuario(frame):
     label = tk.Label(frame, text="Painel do Usuário", font=("Arial", 16))

@@ -164,6 +164,7 @@ def Mostrar_Janela_Login(raiz):
     janela_login.resizable(False, False)
     #janela_login.transient(raiz)
     janela_login.grab_set()
+    janela_login.focus_force()
     
     Centralizar_Janela(janela_login)
     

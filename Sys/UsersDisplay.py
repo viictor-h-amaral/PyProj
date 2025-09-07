@@ -6,9 +6,12 @@ import Sys.Codifier as codifier
 
 controle_usuarios_exibidos = [0, 10]
 
-def Gerar_Pagina_Gerenciamento_Usuarios():
+def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
 
-    pagina = tk.Toplevel()
+    pagina = tk.Toplevel(raiz)
+    pagina.transient(raiz)
+    pagina.grab_set()
+    pagina.focus_force()
     pagina.title("Usuários")
     pagina.geometry("800x400")
 
