@@ -1,68 +1,158 @@
 import tkinter as tk
-from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout, Centralizar_Janela
-import Sys.LevelDisplay as LDisplay
-import Sys.MyLevelsDisplay as MLDisplay
-import Sys.UsersDisplay as UDisplay
+from Sys.Login import inicializar_sistema_login, obter_usuario_atual, fazer_logout, centralizar_janela
+import Sys.ExibicaoNiveis as exibicao_niveis
+import Sys.ExibicaoMeusNiveis as exibicao_meus_niveis
+import Sys.ExibicaoUsuarios as exibicao_usuarios
 
-def principal():
-    raiz = tk.Tk()
-    raiz.title("Sistema Principal")
-    raiz.geometry("800x600")
-    Centralizar_Janela(raiz)
+# Configurações de estilo atualizadas
+FONTE_PADRAO = "Roboto"
+COR_PRIMARIA = "#6366f1"
+COR_SECUNDARIA = "#818cf8"
+COR_ACENTO = "#f471b5"
+COR_TEXTO = "#1e293b"
+COR_FUNDO = "#f1f5f9"
+COR_DESTAQUE = "#0ea5e9"
+
+def main():
+    janela_principal = tk.Tk()
+    janela_principal.title("Pipe Puzzle Master")
+    janela_principal.geometry("900x650")
+    janela_principal.configure(bg=COR_FUNDO)
+    centralizar_janela(janela_principal)
     
     def ao_login_sucesso(dados_usuario):
-        print(f"Usuário logado: {dados_usuario['usuario']}")
-        print(f"Papel: {dados_usuario['papel']}")
-        raiz.deiconify()
-        configurar_interface_principal(raiz)
+        print(f"Usuário logado: {dados_usuario['username']}")
+        print(f"Papel: {dados_usuario['role']}")
+        janela_principal.deiconify()
+        configurar_interface_principal(janela_principal)
 
-    Inicializar_Sistema_Login(raiz, ao_login_sucesso)
-    raiz.mainloop()
+    inicializar_sistema_login(janela_principal, ao_login_sucesso)
+    janela_principal.mainloop()
 
-def configurar_interface_principal(raiz):
-    for widget in raiz.winfo_children():
+def configurar_interface_principal(janela_principal):
+    for widget in janela_principal.winfo_children():
         widget.destroy()
     
-    frame_cabecalho = tk.Frame(raiz, bg='lightgray', height=50)
+    # Cabeçalho com estilo futurista
+    frame_cabecalho = tk.Frame(janela_principal, bg=COR_PRIMARIA, height=70)
     frame_cabecalho.pack(fill='x')
     frame_cabecalho.pack_propagate(False)
     
-    usuario_atual = Obter_Usuario_Atual()
-    label_boas_vindas = tk.Label(frame_cabecalho, 
-                               text=f"Olá, {usuario_atual['usuario']}!",
-                               bg='lightgray', font=("Arial", 14))
-    label_boas_vindas.pack(side='left', padx=20, pady=10)
+    usuario_atual = obter_usuario_atual()
+    rotulo_boas_vindas = tk.Label(
+        frame_cabecalho, 
+        text=f"Bem-vindo, {usuario_atual['username']}!",
+        bg=COR_PRIMARIA, 
+        fg='white', 
+        font=(FONTE_PADRAO, 16, "bold")
+    )
+    rotulo_boas_vindas.pack(side='left', padx=25, pady=15)
     
-    botao_logout = tk.Button(frame_cabecalho, text="Sair", 
-                          command=lambda: Fazer_Logout(raiz, lambda: print("Logout realizado")))
-    botao_logout.pack(side='right', padx=20, pady=10)
+    botao_sair = tk.Button(
+        frame_cabecalho, 
+        text="Sair", 
+        command=lambda: fazer_logout(janela_principal, lambda: print("Logout realizado")),
+        bg=COR_ACENTO, 
+        fg='white', 
+        font=(FONTE_PADRAO, 11, "bold"),
+        relief='flat', 
+        padx=20, 
+        pady=8,
+        cursor="hand2"
+    )
+    botao_sair.pack(side='right', padx=25, pady=15)
     
-    frame_conteudo = tk.Frame(raiz)
-    frame_conteudo.pack(expand=True, fill='both', padx=20, pady=20)
+    frame_conteudo = tk.Frame(janela_principal, bg=COR_FUNDO)
+    frame_conteudo.pack(expand=True, fill='both', padx=25, pady=25)
     
-    if usuario_atual['papel'] == 'admin':
-        configurar_interface_admin(frame_conteudo, raiz)
+    if usuario_atual['role'] == 'admin':
+        configurar_interface_administrador(frame_conteudo, janela_principal)
     else:
         configurar_interface_usuario(frame_conteudo)
 
-def configurar_interface_admin(frame, pagina):
-
-    label = tk.Label(frame, text="Painel Administrativo", font=("Arial", 16))
-    label.pack(pady=20)
+def configurar_interface_administrador(frame, janela_principal):
+    rotulo_titulo = tk.Label(
+        frame, 
+        text="Painel Administrativo", 
+        font=(FONTE_PADRAO, 20, "bold"), 
+        fg=COR_PRIMARIA, 
+        bg=COR_FUNDO
+    )
+    rotulo_titulo.pack(pady=25)
     
-    tk.Button(frame, text="Gerenciar Usuários", width=20, height=2, command=lambda: UDisplay.Gerar_Pagina_Gerenciamento_Usuarios(pagina)).pack(pady=5)
-    tk.Button(frame, text="Acessar Níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis(pagina)).pack(pady=5)
-    tk.Button(frame, text="Meus níveis", width=20, height=2, command=lambda: MLDisplay.Gerar_Pagina_Meus_Niveis(pagina)).pack(pady=5)
-    tk.Button(frame, text="Criar nível", width=20, height=2).pack(pady=5)
-   
+    estilo_botao = {
+        'width': 28,
+        'height': 2,
+        'font': (FONTE_PADRAO, 13),
+        'bg': COR_SECUNDARIA,
+        'fg': 'white',
+        'relief': 'flat',
+        'border': 0,
+        'cursor': 'hand2',
+        'activebackground': COR_DESTAQUE
+    }
+    
+    tk.Button(
+        frame, 
+        text="Gerenciar Usuários", 
+        **estilo_botao,
+        command=lambda: exibicao_usuarios.mostrar_pagina_gerenciamento_usuarios(janela_principal)
+    ).pack(pady=12)
+    
+    tk.Button(
+        frame, 
+        text="Acessar Níveis", 
+        **estilo_botao,
+        command=lambda: exibicao_niveis.mostrar_pagina_niveis(janela_principal)
+    ).pack(pady=12)
+    
+    tk.Button(
+        frame, 
+        text="Meus Níveis", 
+        **estilo_botao,
+        command=lambda: exibicao_meus_niveis.mostrar_pagina_meus_niveis(janela_principal)
+    ).pack(pady=12)
+    
+    tk.Button(
+        frame, 
+        text="Criar Nível", 
+        **estilo_botao
+    ).pack(pady=12)
 
 def configurar_interface_usuario(frame):
-    label = tk.Label(frame, text="Painel do Usuário", font=("Arial", 16))
-    label.pack(pady=20)
+    rotulo_titulo = tk.Label(
+        frame, 
+        text="Painel do Usuário", 
+        font=(FONTE_PADRAO, 20, "bold"), 
+        fg=COR_PRIMARIA, 
+        bg=COR_FUNDO
+    )
+    rotulo_titulo.pack(pady=25)
     
-    tk.Button(frame, text="Conquistas", width=20, height=2).pack(pady=5)
-    tk.Button(frame, text="Acessar níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis()).pack(pady=5)
-
+    estilo_botao = {
+        'width': 28,
+        'height': 2,
+        'font': (FONTE_PADRAO, 13),
+        'bg': COR_SECUNDARIA,
+        'fg': 'white',
+        'relief': 'flat',
+        'border': 0,
+        'cursor': 'hand2',
+        'activebackground': COR_DESTAQUE
+    }
+    
+    tk.Button(
+        frame, 
+        text="Conquistas", 
+        **estilo_botao
+    ).pack(pady=12)
+    
+    tk.Button(
+        frame, 
+        text="Acessar Níveis", 
+        **estilo_botao,
+        command=lambda: exibicao_niveis.mostrar_pagina_niveis()
+    ).pack(pady=12)
 
 if __name__ == "__main__":
-    principal()
+    main()
