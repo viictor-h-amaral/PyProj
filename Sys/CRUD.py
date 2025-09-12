@@ -63,6 +63,17 @@ def Buscar_Peca(peca_id):
     for dado in dados['pecas']:
         if dado['id'] == peca_id: return dado
 
+def Buscar_Pecas():
+    with open(Obter_Caminho_Arquivo('Pecas.json'), 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
+
+    pecas = []
+
+    for dado in dados['pecas']:
+        pecas.append(dado)
+
+    return pecas
+
 def Buscar_Peca_Arquivo(peca_id):
     peca = Buscar_Peca(peca_id)
     return peca['arquivo'] + '.png'
