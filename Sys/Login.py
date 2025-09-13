@@ -39,10 +39,10 @@ def Criar_Novo_Usuario(usuario, senha, papel):
     usuarios = crud.Carregar_Usuarios()
     
     if any(user['usuario'] == usuario for user in usuarios):
-        return False, "Usuário já existe"
+        return False, "Usuário já existente"
     
     novo_usuario = {
-        'id': len(usuarios) + 1,
+        'id': crud.Gerar_Id(usuarios), #len(usuarios) + 1,
         'usuario': usuario,
         'senha': codifier.Codificar_Senha(senha),
         'papel': papel,

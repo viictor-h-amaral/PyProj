@@ -89,5 +89,19 @@
         "dificuldade": "facil",
         "estrutura": 5,
         "criador": "admin"
+    },
+    {
+        "id": 14,
+        "nome": "nivel_a",
+        "dificuldade": "facil",
+        "estrutura": 6,
+        "criador": "admin"
+    },
+    {
+        "id": 15,
+        "nome": "nivel_b",
+        "dificuldade": "facil",
+        "estrutura": 7,
+        "criador": "admin"
     }
 ]

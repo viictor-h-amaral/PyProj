@@ -12,7 +12,6 @@ Botao_Selecionado = None
 
 def Gerar_Pagina_Criacao_Nivel(raiz):
     Exibir_Janela_Dimensoes_Nivel(raiz)
-    #Exibir_Janela_Criacao_Nivel(raiz)
 
 def Exibir_Janela_Dimensoes_Nivel(raiz):
     janela = tk.Toplevel(raiz)
@@ -91,6 +90,8 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     janela.focus_force()
 
     def ao_fechar_janela():
+        global num_linhas, num_colunas, Matriz_Estrutural
+
         Matriz_Estrutural = []
         num_linhas = None
         num_colunas = None
@@ -106,21 +107,19 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     largura_janela, altura_janela = Calcular_Tamanho_Janela(num_linhas, num_colunas)
     janela.geometry(f'{largura_janela}x{altura_janela}')
 
-    # CONFIGURAÇÃO CORRIGIDA - Configure a JANELA, não a raiz
-    janela.grid_rowconfigure(0, weight=1)  # 3 partes para a matriz
-    janela.grid_rowconfigure(1, weight=1)  # 1 parte para as peças
+    janela.grid_rowconfigure(0, weight=1)
+    janela.grid_rowconfigure(1, weight=1) 
     janela.grid_columnconfigure(0, weight=1)
 
     Centralizar_Janela(janela)
-    # Frame principal para a matriz
+
     frame_nivel = tk.Frame(janela,)
     frame_nivel.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
     
-    # Configure o frame_nivel para expandir
     frame_nivel.grid_rowconfigure(0, weight=1)
-    frame_nivel.grid_columnconfigure(0, weight=1)  # esquerda
-    frame_nivel.grid_columnconfigure(1, weight=1)  # matriz (maior peso)
-    frame_nivel.grid_columnconfigure(2, weight=1)  # direita
+    frame_nivel.grid_columnconfigure(0, weight=1) 
+    frame_nivel.grid_columnconfigure(1, weight=1)  
+    frame_nivel.grid_columnconfigure(2, weight=1)  
 
     frame_esquerda = tk.Frame(frame_nivel, width=80)
     frame_direita = tk.Frame(frame_nivel, width=80)
@@ -130,7 +129,6 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     frame_matriz_estrutural.grid(row=0, column=1, sticky='nsew', padx=5, pady=5)
     frame_direita.grid(row=0, column=2, sticky='ns')
 
-    # Configure a matriz para expandir
     for i in range(num_linhas):
         frame_matriz_estrutural.grid_rowconfigure(i, weight=1, uniform="peca_row")
     for j in range(num_colunas):
@@ -152,7 +150,6 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     janela.botoes_pecas = {}
     janela.imagens_pecas = []
     
-    # Cria botões
     for indice_linha in range(num_linhas):
         for indice_coluna in range(num_colunas):
             botao = tk.Button(frame_matriz_estrutural, state='normal', 
@@ -179,10 +176,10 @@ def Exibir_Janela_Criacao_Nivel(raiz):
                 botao.config(image=imagem_peca)
                 botao.image = imagem_peca
     
-    # Chama após um breve delay para garantir que a janela esteja renderizada
+    Gera_Secao_Todas_As_Pecas(janela)
+
     janela.after(100, atualizar_imagens)
 
-    Gera_Secao_Todas_As_Pecas(janela)
 
 def Clique_Botao_Matriz_Estrutural(raiz, linha, coluna):
     global Botao_Selecionado
@@ -196,31 +193,24 @@ def Clique_Botao_Matriz_Estrutural(raiz, linha, coluna):
         Botao_Selecionado.config(bg='SystemButtonFace')
 
     Botao_Selecionado = raiz.botoes_pecas[(linha, coluna)]
-    Botao_Selecionado.config(bg='red')#, state='readonly')
+    Botao_Selecionado.config(bg='red')
     Botao_Selecionado.linha = linha
     Botao_Selecionado.coluna = coluna
 
 def Calcular_Tamanho_Janela(num_linhas, num_colunas):
-    """
-    Calcula o tamanho ideal da janela baseado na matriz
-    Mantém peças maiores para matrizes pequenas e ajusta para matrizes grandes
-    """
     
-    # Tamanho base por célula (ajuste esses valores conforme necessário)
     if num_linhas <= 3 and num_colunas <= 3:
-        tamanho_celula = 120  # Matrizes pequenas: peças grandes
+        tamanho_celula = 120  
     elif num_linhas <= 5 and num_colunas <= 5:
-        tamanho_celula = 90   # Matrizes médias: peças médias
+        tamanho_celula = 90   
     else:
-        tamanho_celula = 70   # Matrizes grandes: peças menores
+        tamanho_celula = 70 
     
-    # Calcula tamanho total da área do nível
     largura_nivel = num_colunas * tamanho_celula
     altura_nivel = num_linhas * tamanho_celula
     
-    # Adiciona espaço para as labels "Início" e "Fim" e margens
-    largura_total = largura_nivel + 200  # +200 para labels laterais e margens
-    altura_total = altura_nivel + 100    # +100 para margens superior e inferior
+    largura_total = largura_nivel + 200
+    altura_total = altura_nivel + 100   
     
     return largura_total, altura_total
 
@@ -228,7 +218,6 @@ def Gera_Secao_Todas_As_Pecas(janela):
     frame_pecas = tk.Frame(janela)
     frame_pecas.grid(row=1, column=0, sticky='nsew', padx=10, pady=5)
     
-    # Configure o frame de peças para ter a mesma estrutura
     num_linhas_pecas = 2
     num_colunas_pecas = 8
     
@@ -250,7 +239,6 @@ def Gera_Secao_Todas_As_Pecas(janela):
     
     janela.botoes_pecas_padrao = {}
     
-    # Cria botões padrões com a mesma configuração
     for indice_linha in range(num_linhas_pecas):
         for indice_coluna in range(num_colunas_pecas):
             botao = tk.Button(frame_pecas, state='normal', 
@@ -259,23 +247,25 @@ def Gera_Secao_Todas_As_Pecas(janela):
             janela.botoes_pecas_padrao[(indice_linha, indice_coluna)] = botao
 
     def atualizar_imagens_pecas():
-        # Usa o mesmo tamanho das imagens principais
         frame_pecas.update_idletasks()
+
         largura_frame = frame_pecas.winfo_width()
         altura_frame = frame_pecas.winfo_height()
         largura_botao = largura_frame // num_colunas_pecas
         altura_botao = altura_frame // num_linhas_pecas
+
         tamanho_imagem = min(largura_botao, altura_botao) - 2
         
         for (linha, coluna), botao in janela.botoes_pecas_padrao.items():
             peca_id = janela.matriz_pecas[linha][coluna]
             imagem_peca = LRunner.Buscar_Imagem_Peca(peca_id, (tamanho_imagem, tamanho_imagem))
-            janela.imagens_pecas.append(imagem_peca)
+
+            if (imagem_peca not in janela.imagens_pecas):
+                janela.imagens_pecas.append(imagem_peca)
+
             botao.config(image=imagem_peca)
-            botao.image = imagem_peca
     
-    # Espera um pouco mais para garantir que o tamanho principal esteja disponível
-    janela.after(300, atualizar_imagens_pecas)
+    janela.after(200, atualizar_imagens_pecas)
 
 def Clique_Botao_Matriz_Pecas(raiz, linha, coluna):
     global Matriz_Estrutural, Botao_Selecionado

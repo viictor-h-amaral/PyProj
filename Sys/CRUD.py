@@ -12,13 +12,13 @@ def Buscar_Niveis():
     with open(Obter_Caminho_Arquivo('Niveis.json'), 'r', encoding='utf-8') as arquivo_json:
         dados = json.load(arquivo_json)
 
-    return dados['niveis']
+    return dados
 
 def Buscar_Nivel(nivel_id):
     with open(Obter_Caminho_Arquivo('Niveis.json'), 'r', encoding='utf-8') as arquivo_json:
         dados = json.load(arquivo_json)
 
-    for dado in dados['niveis']:
+    for dado in dados:
         if dado['id'] == nivel_id: return dado
 
 def Buscar_Niveis_Do_Usuario(usuario):
@@ -26,7 +26,7 @@ def Buscar_Niveis_Do_Usuario(usuario):
         dados = json.load(arquivo_json)
 
     niveis_usuario = []
-    for dado in dados['niveis']:
+    for dado in dados:
         if dado['criador'] == usuario : niveis_usuario.append(dado)
     return niveis_usuario
 
@@ -34,14 +34,14 @@ def Buscar_Estrutura(estrutura_id):
     with open(Obter_Caminho_Arquivo('Estruturas.json'), 'r', encoding='utf-8') as arquivo_json:
         dados = json.load(arquivo_json)
 
-    for dado in dados['estruturas']:
+    for dado in dados:
         if dado['id'] == estrutura_id: return dado
 
 def Buscar_Estruturas():
     with open(Obter_Caminho_Arquivo('Estruturas.json'), 'r', encoding='utf-8') as arquivo_json:
         dados = json.load(arquivo_json)
 
-    return dados['estruturas']
+    return dados
 
 def Buscar_Estrutura_Do_Nivel(nivel_id):
     nivel = Buscar_Nivel(nivel_id)
@@ -100,8 +100,14 @@ def Buscar_Grupo_Pecas_Por_Id(grupo_id):
 def Salvar_Nivel_Concluido(usuario, nivel):
     usuarios = Carregar_Usuarios()
     usuarios_atualizados = []
+    nome_usuario = usuario['usuario']
+    
+    nivel_id = nivel['id']
+
     for user in usuarios:
-        if user['usuario'] == usuario['usuario']: user['niveis_concluidos'].append(nivel['id'])
+        nivel_concluido = Retornar_Se_Nivel_Concluido(user, nivel_id)
+        if (user['usuario'] == nome_usuario) and not nivel_concluido: 
+            user['niveis_concluidos'].append(nivel['id'])
         usuarios_atualizados.append(user)
     Salvar_Usuarios(usuarios_atualizados)
 
@@ -114,7 +120,7 @@ def Salvar_Nivel(nome_nivel, dificuldade, matriz, criador):
     niveis = Buscar_Niveis()
 
     novo_nivel = {
-        'id' : len(niveis) + 1,
+        'id' : Gerar_Id(niveis), #len(niveis) + 1,
         'nome' : nome_nivel,
         'dificuldade' : dificuldade,
         'estrutura' : id_estrutura,
@@ -130,7 +136,7 @@ def Salvar_Estrutura(matriz):
     estruturas = Buscar_Estruturas()
 
     nova_estrutura = {
-        'id' : len(estruturas) + 1,
+        'id' : Gerar_Id(estruturas), #len(estruturas) + 1,
         'matriz_pecas' : matriz
     }
 
@@ -139,3 +145,10 @@ def Salvar_Estrutura(matriz):
         json.dump(estruturas, f, indent=4, ensure_ascii=False)
 
     return nova_estrutura['id']
+
+def Gerar_Id(lista_dicionarios):
+    maior_id = 0
+    for dicionario in lista_dicionarios:
+        if maior_id < dicionario['id']: maior_id = dicionario['id']
+
+    return maior_id + 1
