@@ -1,88 +1,93 @@
-{
-    "niveis":[
-        {
-            "id":1,
-            "nome": "Primeiro de muitos",
-            "dificuldade": "Facil",
-            "estrutura": 1,
-            "criador": "admin"
-        },
-        {
-            "id":2,
-            "nome": "Primeiro de muitos2",
-            "dificuldade": "Fácil",
-            "estrutura": 2,
-            "criador": "admin"
-        },
-        {
-            "id":3,
-            "nome": "Primeiro de muitos3",
-            "dificuldade": "Facil",
-            "estrutura": 3,
-            "criador": "admin"
-        },
-        {
-            "id":4,
-            "nome": "Primeiro de muitos4",
-            "dificuldade": "Facil",
-            "estrutura": 4,
-            "criador": "admin"
-        },
-        {
-            "id":5,
-            "nome": "Primeiro de muitos5",
-            "dificuldade": "medio",
-            "estrutura": 1,
-            "criador": "admin"
-        },
-        {
-            "id":6,
-            "nome": "Primeiro de muitos6",
-            "dificuldade": "dificil",
-            "estrutura": 1,
-            "criador": "admin"
-        },
-		{
-            "id":7,
-            "nome": "Primeiro de muitos7",
-            "dificuldade": "Facil",
-            "estrutura": 1,
-            "criador": "admin"
-        },
-        {
-            "id":8,
-            "nome": "Primeiro de muitos8",
-            "dificuldade": "medio",
-            "estrutura": 1,
-            "criador": ""
-        },
-        {
-            "id":9,
-            "nome": "Primeiro de muitos9",
-            "dificuldade": "dificil",
-            "estrutura": 1,
-            "criador": ""
-        },
-        {
-            "id":10,
-            "nome": "Primeiro de muitos10",
-            "dificuldade": "Facil",
-            "estrutura": 1,
-            "criador": ""
-        },
-        {
-            "id":11,
-            "nome": "Primeiro de muitos11",
-            "dificuldade": "medio",
-            "estrutura": 1,
-            "criador": ""
-        },
-        {
-            "id":12,
-            "nome": "Primeiro de muitos12",
-            "dificuldade": "dificil",
-            "estrutura": 2,
-            "criador": "victor"
-        }
-    ]
-}
+[
+    {
+        "id": 1,
+        "nome": "Primeiro de muitos",
+        "dificuldade": "Facil",
+        "estrutura": 1,
+        "criador": "admin"
+    },
+    {
+        "id": 2,
+        "nome": "Primeiro de muitos2",
+        "dificuldade": "Fácil",
+        "estrutura": 2,
+        "criador": "admin"
+    },
+    {
+        "id": 3,
+        "nome": "Primeiro de muitos3",
+        "dificuldade": "Facil",
+        "estrutura": 3,
+        "criador": "admin"
+    },
+    {
+        "id": 4,
+        "nome": "Primeiro de muitos4",
+        "dificuldade": "Facil",
+        "estrutura": 4,
+        "criador": "admin"
+    },
+    {
+        "id": 5,
+        "nome": "Primeiro de muitos5",
+        "dificuldade": "medio",
+        "estrutura": 1,
+        "criador": "admin"
+    },
+    {
+        "id": 6,
+        "nome": "Primeiro de muitos6",
+        "dificuldade": "dificil",
+        "estrutura": 1,
+        "criador": "admin"
+    },
+    {
+        "id": 7,
+        "nome": "Primeiro de muitos7",
+        "dificuldade": "Facil",
+        "estrutura": 1,
+        "criador": "admin"
+    },
+    {
+        "id": 8,
+        "nome": "Primeiro de muitos8",
+        "dificuldade": "medio",
+        "estrutura": 1,
+        "criador": ""
+    },
+    {
+        "id": 9,
+        "nome": "Primeiro de muitos9",
+        "dificuldade": "dificil",
+        "estrutura": 1,
+        "criador": ""
+    },
+    {
+        "id": 10,
+        "nome": "Primeiro de muitos10",
+        "dificuldade": "Facil",
+        "estrutura": 1,
+        "criador": ""
+    },
+    {
+        "id": 11,
+        "nome": "Primeiro de muitos11",
+        "dificuldade": "medio",
+        "estrutura": 1,
+        "criador": ""
+    },
+    {
+        "id": 12,
+        "nome": "Primeiro de muitos12",
+        "dificuldade": "dificil",
+        "estrutura": 2,
+        "criador": "victor"
+    },
+    {
+        "id": 13,
+        "nome": "primeiro natural",
+        "dificuldade": "facil",
+        "estrutura": 5,
+        "criador": "admin"
+    }
+]

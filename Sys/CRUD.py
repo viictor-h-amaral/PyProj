@@ -37,6 +37,12 @@ def Buscar_Estrutura(estrutura_id):
     for dado in dados['estruturas']:
         if dado['id'] == estrutura_id: return dado
 
+def Buscar_Estruturas():
+    with open(Obter_Caminho_Arquivo('Estruturas.json'), 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
+
+    return dados['estruturas']
+
 def Buscar_Estrutura_Do_Nivel(nivel_id):
     nivel = Buscar_Nivel(nivel_id)
     return Buscar_Estrutura(nivel['estrutura'])
@@ -101,3 +107,35 @@ def Salvar_Nivel_Concluido(usuario, nivel):
 
 def Retornar_Se_Nivel_Concluido(usuario, nivel_id):
     return (nivel_id in usuario['niveis_concluidos'])
+
+def Salvar_Nivel(nome_nivel, dificuldade, matriz, criador):
+    id_estrutura = Salvar_Estrutura(matriz)
+
+    niveis = Buscar_Niveis()
+
+    novo_nivel = {
+        'id' : len(niveis) + 1,
+        'nome' : nome_nivel,
+        'dificuldade' : dificuldade,
+        'estrutura' : id_estrutura,
+        'criador' : criador['usuario']
+    }
+
+    niveis.append(novo_nivel)
+
+    with open(Obter_Caminho_Arquivo('Niveis.json'), 'w', encoding='utf-8') as f:
+        json.dump(niveis, f, indent=4, ensure_ascii=False)
+
+def Salvar_Estrutura(matriz):
+    estruturas = Buscar_Estruturas()
+
+    nova_estrutura = {
+        'id' : len(estruturas) + 1,
+        'matriz_pecas' : matriz
+    }
+
+    estruturas.append(nova_estrutura)
+    with open(Obter_Caminho_Arquivo('Estruturas.json'), 'w', encoding='utf-8') as f:
+        json.dump(estruturas, f, indent=4, ensure_ascii=False)
+
+    return nova_estrutura['id']
