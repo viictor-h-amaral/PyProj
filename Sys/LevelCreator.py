@@ -58,6 +58,9 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
         elif (int(linhas) <= 0) or (int(colunas) <= 0):
             messagebox.showerror("Erro!", "Você deve informar uma quantidade de linhas e de colunas maior que zero.")
             return
+        elif (int(linhas) > 8) or (int(colunas) > 8):
+            messagebox.showerror("Erro!", "Número máximo de linhas e colnas é 8.")
+            return
 
         global num_linhas, num_colunas
         num_linhas = int(linhas)
@@ -102,37 +105,49 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     janela.protocol("WM_DELETE_WINDOW", ao_fechar_janela)
 
     janela.title("Criar nível")
-    janela.resizable(False, False)
+    janela.resizable(True, True)
 
-    largura_janela, altura_janela = Calcular_Tamanho_Janela(num_linhas, num_colunas)
+    tamanho_botao = Calcular_Tamanho_Botao(num_linhas, num_colunas)
+    
+    largura_frame_nivel = (num_colunas * tamanho_botao) + (2 * num_colunas * 1) + (2 * 5) #TAMANHO BOTOES + MARGEM 1PX BOTOES + MARGEM FRAMES
+    altura_frame_nivel = (num_linhas * tamanho_botao) + (2 * num_linhas * 1) + (2 * 5) #TAMANHO BOTOES + MARGEM 1PX + MARGEM FRAMES
+    
+    largura_frame_pecas = (8 * tamanho_botao) + (2 * 8) + (2 * 10)
+    altura_frame_pecas = (2 * tamanho_botao) + (2 * 2) + (2 * 10)
+
+    largura_janela = max(largura_frame_nivel, largura_frame_pecas) + 200  
+    altura_janela = altura_frame_nivel + altura_frame_pecas + 100  
+
     janela.geometry(f'{largura_janela}x{altura_janela}')
 
-    janela.grid_rowconfigure(0, weight=1)
-    janela.grid_rowconfigure(1, weight=1) 
-    janela.grid_columnconfigure(0, weight=1)
+    janela.grid_rowconfigure(0, weight=0) 
+    janela.grid_rowconfigure(1, weight=0)  
+    janela.grid_columnconfigure(0, weight=0)
 
     Centralizar_Janela(janela)
 
-    frame_nivel = tk.Frame(janela,)
+    frame_nivel = tk.Frame(janela, bg='blue')
     frame_nivel.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
     
     frame_nivel.grid_rowconfigure(0, weight=1)
-    frame_nivel.grid_columnconfigure(0, weight=1) 
-    frame_nivel.grid_columnconfigure(1, weight=1)  
-    frame_nivel.grid_columnconfigure(2, weight=1)  
+    frame_nivel.grid_columnconfigure(0, weight=1)
+    frame_nivel.grid_columnconfigure(1, weight=0)
+    frame_nivel.grid_columnconfigure(2, weight=1)
 
     frame_esquerda = tk.Frame(frame_nivel, width=80)
     frame_direita = tk.Frame(frame_nivel, width=80)
     frame_matriz_estrutural = tk.Frame(frame_nivel)
     
-    frame_esquerda.grid(row=0, column=0, sticky='ns')
-    frame_matriz_estrutural.grid(row=0, column=1, sticky='nsew', padx=5, pady=5)
-    frame_direita.grid(row=0, column=2, sticky='ns')
+    frame_matriz_estrutural.grid_propagate(True)
+    
+    frame_esquerda.grid(row=0, column=0, sticky='nse')
+    frame_matriz_estrutural.grid(row=0, column=1, sticky='', padx=5, pady=5)
+    frame_direita.grid(row=0, column=2, sticky='nsw')
 
     for i in range(num_linhas):
-        frame_matriz_estrutural.grid_rowconfigure(i, weight=1, uniform="peca_row")
+        frame_matriz_estrutural.grid_rowconfigure(i, weight=0, minsize=tamanho_botao)
     for j in range(num_colunas):
-        frame_matriz_estrutural.grid_columnconfigure(j, weight=1, uniform="peca_col")
+        frame_matriz_estrutural.grid_columnconfigure(j, weight=0, minsize=tamanho_botao)
 
     tk.Label(frame_esquerda, text="Início", font=("Arial", 14), fg='green').pack(side='bottom', pady=10)
 
@@ -140,45 +155,37 @@ def Exibir_Janela_Criacao_Nivel(raiz):
         global Matriz_Estrutural
         nivel_valido = LRunner.Rotina_Verifica_Nivel_Valido(Matriz_Estrutural)
 
-        if nivel_valido: Exibir_Janela_Salvar_Nivel(raiz)
+        if nivel_valido: 
+            Exibir_Janela_Salvar_Nivel(raiz)
+        else:
+            messagebox.showerror("Opss", "O nível criado não é válido!")
 
     tk.Button(frame_esquerda, text="Salvar nível", font=("Arial", 14), bg='green', fg='white',
                             command=lambda: Salvar_Nivel()).pack(side='top', pady=10)
 
-    tk.Label(frame_direita, text="Fim", font=("Arial", 14), fg='red').pack(side='top', pady=10)
+    tk.Label(frame_direita, text="Fim", font=("Arial", 14), fg='red').pack(side='top', pady=10, anchor='w')
 
     janela.botoes_pecas = {}
     janela.imagens_pecas = []
     
+    tamanho_imagem = tamanho_botao - 2
+    
     for indice_linha in range(num_linhas):
         for indice_coluna in range(num_colunas):
-            botao = tk.Button(frame_matriz_estrutural, state='normal', 
-                            command=lambda l=indice_linha, c=indice_coluna: Clique_Botao_Matriz_Estrutural(janela, l, c))
+
+            imagem_inicial = LRunner.Buscar_Imagem_Peca(0, (tamanho_imagem, tamanho_imagem))
+            janela.imagens_pecas.append(imagem_inicial)
+            
+            botao = tk.Button(frame_matriz_estrutural, 
+                             image=imagem_inicial,
+                             state='normal',
+                             width=tamanho_botao,
+                             height=tamanho_botao,
+                             command=lambda l=indice_linha, c=indice_coluna: Clique_Botao_Matriz_Estrutural(janela, l, c))
             botao.grid(row=indice_linha, column=indice_coluna, sticky='nsew', padx=1, pady=1)
             janela.botoes_pecas[(indice_linha, indice_coluna)] = botao
 
-    def atualizar_imagens():
-        if janela.botoes_pecas:
-            frame_matriz_estrutural.update_idletasks()
-            
-            largura_frame = frame_matriz_estrutural.winfo_width()
-            altura_frame = frame_matriz_estrutural.winfo_height()
-            
-            largura_botao = largura_frame // num_colunas
-            altura_botao = altura_frame // num_linhas
-
-            tamanho_imagem = min(largura_botao, altura_botao) - 2
-            
-            for (linha, coluna), botao in janela.botoes_pecas.items():
-                peca_id = Matriz_Estrutural[linha][coluna]
-                imagem_peca = LRunner.Buscar_Imagem_Peca(peca_id, (tamanho_imagem, tamanho_imagem))
-                janela.imagens_pecas.append(imagem_peca)
-                botao.config(image=imagem_peca)
-                botao.image = imagem_peca
-    
-    Gera_Secao_Todas_As_Pecas(janela)
-
-    janela.after(100, atualizar_imagens)
+    Gera_Secao_Todas_As_Pecas(janela, tamanho_botao)
 
 
 def Clique_Botao_Matriz_Estrutural(raiz, linha, coluna):
@@ -197,90 +204,76 @@ def Clique_Botao_Matriz_Estrutural(raiz, linha, coluna):
     Botao_Selecionado.linha = linha
     Botao_Selecionado.coluna = coluna
 
-def Calcular_Tamanho_Janela(num_linhas, num_colunas):
-    
+def Calcular_Tamanho_Botao(num_linhas, num_colunas):
+    """Calcula o tamanho fixo dos botões baseado no tamanho da matriz"""
     if num_linhas <= 3 and num_colunas <= 3:
-        tamanho_celula = 120  
+        return 120 
     elif num_linhas <= 5 and num_colunas <= 5:
-        tamanho_celula = 90   
+        return 90   
     else:
-        tamanho_celula = 70 
-    
-    largura_nivel = num_colunas * tamanho_celula
-    altura_nivel = num_linhas * tamanho_celula
-    
-    largura_total = largura_nivel + 200
-    altura_total = altura_nivel + 100   
-    
-    return largura_total, altura_total
+        return 70  
 
-def Gera_Secao_Todas_As_Pecas(janela):
-    frame_pecas = tk.Frame(janela)
-    frame_pecas.grid(row=1, column=0, sticky='nsew', padx=10, pady=5)
+
+def Gera_Secao_Todas_As_Pecas(janela, tamanho_botao):
+    frame_pecas = tk.Frame(janela, bg='yellow')
+    frame_pecas.grid(row=1, column=0, sticky='nsew', padx=10, pady=10)
     
     num_linhas_pecas = 2
     num_colunas_pecas = 8
     
     for i in range(num_linhas_pecas):
-        frame_pecas.grid_rowconfigure(i, weight=1)
+        frame_pecas.grid_rowconfigure(i, weight=0, minsize=tamanho_botao)
     for j in range(num_colunas_pecas):
-        frame_pecas.grid_columnconfigure(j, weight=1)
+        frame_pecas.grid_columnconfigure(j, weight=0, minsize=tamanho_botao)
 
     pecas = crud.Buscar_Pecas()
     janela.matriz_pecas = []
     
     indice_peca_atual = 0
     for linha in range(num_linhas_pecas):
-        linha = []
+        linha_pecas = []
         for coluna in range(num_colunas_pecas):
-            linha.append( pecas[indice_peca_atual]['id'] )
-            if indice_peca_atual < len(pecas) + 1 : indice_peca_atual += 1
-        janela.matriz_pecas.append(linha)
+            if indice_peca_atual < len(pecas):
+                linha_pecas.append(pecas[indice_peca_atual]['id'])
+                indice_peca_atual += 1
+            else:
+                linha_pecas.append(0) 
+        janela.matriz_pecas.append(linha_pecas)
     
     janela.botoes_pecas_padrao = {}
     
+    tamanho_imagem = tamanho_botao - 2
+    
     for indice_linha in range(num_linhas_pecas):
         for indice_coluna in range(num_colunas_pecas):
-            botao = tk.Button(frame_pecas, state='normal', 
-                            command=lambda l=indice_linha, c=indice_coluna: Clique_Botao_Matriz_Pecas(janela, l, c))
+            peca_id = janela.matriz_pecas[indice_linha][indice_coluna]
+            imagem_peca = LRunner.Buscar_Imagem_Peca(peca_id, (tamanho_imagem, tamanho_imagem))
+            janela.imagens_pecas.append(imagem_peca)
+            
+            botao = tk.Button(frame_pecas, 
+                             image=imagem_peca,
+                             state='normal',
+                             width=tamanho_botao,
+                             height=tamanho_botao,
+                             command=lambda l=indice_linha, c=indice_coluna: Clique_Botao_Matriz_Pecas(janela, l, c))
             botao.grid(row=indice_linha, column=indice_coluna, sticky='nsew', padx=1, pady=1)
             janela.botoes_pecas_padrao[(indice_linha, indice_coluna)] = botao
 
-    def atualizar_imagens_pecas():
-        frame_pecas.update_idletasks()
-
-        largura_frame = frame_pecas.winfo_width()
-        altura_frame = frame_pecas.winfo_height()
-        largura_botao = largura_frame // num_colunas_pecas
-        altura_botao = altura_frame // num_linhas_pecas
-
-        tamanho_imagem = min(largura_botao, altura_botao) - 2
-        
-        for (linha, coluna), botao in janela.botoes_pecas_padrao.items():
-            peca_id = janela.matriz_pecas[linha][coluna]
-            imagem_peca = LRunner.Buscar_Imagem_Peca(peca_id, (tamanho_imagem, tamanho_imagem))
-
-            if (imagem_peca not in janela.imagens_pecas):
-                janela.imagens_pecas.append(imagem_peca)
-
-            botao.config(image=imagem_peca)
-    
-    janela.after(200, atualizar_imagens_pecas)
-
 def Clique_Botao_Matriz_Pecas(raiz, linha, coluna):
     global Matriz_Estrutural, Botao_Selecionado
-    if Botao_Selecionado is None: return
+    if Botao_Selecionado is None: 
+        return
 
-    nivel_id = raiz.matriz_pecas[linha][coluna]
-    Matriz_Estrutural[Botao_Selecionado.linha][Botao_Selecionado.coluna] = nivel_id
+    peca_id = raiz.matriz_pecas[linha][coluna]
+    Matriz_Estrutural[Botao_Selecionado.linha][Botao_Selecionado.coluna] = peca_id
 
-    Botao_Selecionado.update_idletasks()
-
-    tamanho_img_atual = min(Botao_Selecionado.winfo_height(), Botao_Selecionado.winfo_width()) - 2
-    nova_imagem = LRunner.Buscar_Imagem_Peca(nivel_id, (tamanho_img_atual, tamanho_img_atual))
+    tamanho_botao = Botao_Selecionado.winfo_width()
+    tamanho_imagem = tamanho_botao - 2 
+    nova_imagem = LRunner.Buscar_Imagem_Peca(peca_id, (tamanho_imagem, tamanho_imagem))
     raiz.imagens_pecas.append(nova_imagem)
 
     Botao_Selecionado.config(bg='SystemButtonFace', image=nova_imagem)
+    Botao_Selecionado.image = nova_imagem
     Botao_Selecionado = None
 
 def Exibir_Janela_Salvar_Nivel(raiz):
@@ -308,6 +301,7 @@ def Exibir_Janela_Salvar_Nivel(raiz):
     def Persistir_Nivel():
         nome_nivel_string = nome_nivel.get()
         crud.Salvar_Nivel(nome_nivel_string, 'facil', Matriz_Estrutural,  Obter_Usuario_Atual())
+        messagebox.showinfo("Operação concluída", "Nível salvo com sucesso!")
         ao_fechar_janela()
 
     tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0)

@@ -103,5 +103,19 @@
         "dificuldade": "facil",
         "estrutura": 7,
         "criador": "admin"
+    },
+    {
+        "id": 16,
+        "nome": "nivel_5x5",
+        "dificuldade": "facil",
+        "estrutura": 8,
+        "criador": "admin"
+    },
+    {
+        "id": 17,
+        "nome": "nivel_correcao_botoes__loop",
+        "dificuldade": "facil",
+        "estrutura": 9,
+        "criador": "admin"
     }
 ]
