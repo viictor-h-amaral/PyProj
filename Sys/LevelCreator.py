@@ -161,7 +161,7 @@ def Exibir_Janela_Criacao_Nivel(raiz):
         nivel_valido = LRunner.Rotina_Verifica_Nivel_Valido(Matriz_Estrutural)
 
         if nivel_valido: 
-            Exibir_Janela_Salvar_Nivel(raiz)
+            Exibir_Janela_Salvar_Nivel(janela)
         else:
             messagebox.showerror("Opss", "O nível criado não é válido!")
 
@@ -310,14 +310,33 @@ def Exibir_Janela_Salvar_Nivel(raiz):
     nome_nivel.grid(row=0, column=1, padx=5, pady=5)
     nome_nivel.focus()
 
+    tk.Label(janela_confirmacao, text="Nível de dificuldade:").grid(row=1, column=0, sticky='w', padx=5, pady=5)
+    dificuldade_novo_nivel = tk.StringVar(value="facil")
+    radio_facil = tk.Radiobutton(janela_confirmacao, text="Fácil", variable=dificuldade_novo_nivel, value="facil")
+    radio_facil.grid(row=2, column=0)
+
+    radio_medio = tk.Radiobutton(janela_confirmacao, text="Médio", variable=dificuldade_novo_nivel, value="medio")
+    radio_medio.grid(row=2, column=1)
+
+    radio_dificil = tk.Radiobutton(janela_confirmacao, text="Difícil", variable=dificuldade_novo_nivel, value="dificil")
+    radio_dificil.grid(row=2, column=2)
+
+
     def Persistir_Nivel():
         nome_nivel_string = nome_nivel.get()
-        crud.Salvar_Nivel(nome_nivel_string, 'facil', Matriz_Estrutural,  Obter_Usuario_Atual())
+        dificuldade = dificuldade_novo_nivel.get()
+
+        if not nome_nivel_string or not dificuldade:
+            messagebox.showerror("Opss", "Você deve informar o nome e a dificuldade do nível para prosseguir!")
+            return
+
+        crud.Salvar_Nivel(nome_nivel_string, dificuldade, Matriz_Estrutural,  Obter_Usuario_Atual())
         messagebox.showinfo("Operação concluída", "Nível salvo com sucesso!")
         ao_fechar_janela()
+        raiz.destroy()
 
-    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0, padx=5, pady=5)
-    tk.Button(janela_confirmacao, text='Salvar', command=lambda: Persistir_Nivel()).grid(row=1, column=1, padx=5, pady=5)
+    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=3, column=0, padx=5, pady=5)
+    tk.Button(janela_confirmacao, text='Salvar', command=lambda: Persistir_Nivel()).grid(row=3, column=1, padx=5, pady=5)
 
     Centralizar_Janela(janela_confirmacao)
     janela_confirmacao.mainloop()

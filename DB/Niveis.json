@@ -54,5 +54,26 @@
         "dificuldade": "dificil",
         "estrutura": 2,
         "criador": "victor"
+    },
+    {
+        "id": 13,
+        "nome": "Nivel dificil teste",
+        "dificuldade": "dificil",
+        "estrutura": 1,
+        "criador": "admin"
+    },
+    {
+        "id": 14,
+        "nome": "teste",
+        "dificuldade": "facil",
+        "estrutura": 2,
+        "criador": "admin"
+    },
+    {
+        "id": 15,
+        "nome": "teste2",
+        "dificuldade": "medio",
+        "estrutura": 3,
+        "criador": "admin"
     }
 ]
