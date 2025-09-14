@@ -117,5 +117,19 @@
         "dificuldade": "facil",
         "estrutura": 9,
         "criador": "admin"
+    },
+    {
+        "id": 18,
+        "nome": "nivel da camila",
+        "dificuldade": "facil",
+        "estrutura": 10,
+        "criador": "admin"
+    },
+    {
+        "id": 19,
+        "nome": "Desafio para a Camila",
+        "dificuldade": "facil",
+        "estrutura": 11,
+        "criador": "admin"
     }
 ]

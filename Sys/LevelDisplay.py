@@ -4,7 +4,7 @@ import Sys.LevelRunner as LRunner
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
-from Sys.Login import Obter_Usuario_Atual, Atualizar_Usuario_Atual
+from Sys.Login import Obter_Usuario_Atual, Atualizar_Usuario_Atual, Centralizar_Janela
 
 Nivel = None
 Estrutura = None
@@ -50,6 +50,8 @@ def Exibir_Nivel_Concluido(nivel_id, pagina):
     raiz.geometry(f'{largura_janela}x{altura_janela}')
     raiz.resizable(False, False)
     
+    Centralizar_Janela(raiz)
+
     num_linhas = len(Matriz_Estrutural)
     num_colunas = len(Matriz_Estrutural[0])
     
@@ -130,6 +132,8 @@ def Exibir_Nivel_Incompleto(nivel_id, pagina):
     raiz.geometry(f'{largura_janela}x{altura_janela}')
     raiz.resizable(False, False)
     
+    Centralizar_Janela(raiz)
+
     num_linhas = len(Matriz_Estrutural)
     num_colunas = len(Matriz_Estrutural[0])
     
@@ -248,6 +252,7 @@ def Gerar_Pagina_Niveis(raiz):
 
     pagina.title("Níveis")
     pagina.geometry("800x400")
+    Centralizar_Janela(pagina)
 
     label = tk.Label(pagina, text="Níveis", font=("Arial", 16))
     label.pack(pady=20)

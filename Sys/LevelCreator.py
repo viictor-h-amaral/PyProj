@@ -27,20 +27,19 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
     janela.protocol("WM_DELETE_WINDOW", ao_fechar_janela)
 
     janela.title("Criar nível")
-    janela.geometry("300x200")
     janela.resizable(False, False)
 
     frame_entradas = tk.Frame(janela)
     frame_entradas.pack(expand=True, fill='both', padx=10, pady=10)
 
-    tk.Label(frame_entradas, text="Número de linhas:").grid(row=0, column=0, sticky='w', pady=(0, 5))
+    tk.Label(frame_entradas, text="Número de linhas:").grid(row=0, column=0, sticky='w', padx=5, pady=5)
     entrada_linhas = tk.Entry(frame_entradas, width=20)
-    entrada_linhas.grid(row=0, column=1, pady=(0, 5))
+    entrada_linhas.grid(row=0, column=1, padx=5, pady=5)
     entrada_linhas.focus()
 
-    tk.Label(frame_entradas, text="Número de colunas:").grid(row=1, column=0, sticky='w', pady=(0, 5))
+    tk.Label(frame_entradas, text="Número de colunas:").grid(row=1, column=0, sticky='w', padx=5, pady=5)
     entrada_colunas = tk.Entry(frame_entradas, width=20)
-    entrada_colunas.grid(row=1, column=1, pady=(0, 5))
+    entrada_colunas.grid(row=1, column=1, padx=5, pady=5)
 
     frame_botoes = tk.Frame(janela)
     frame_botoes.pack(expand=True, fill='both', padx=10, pady=10)
@@ -126,7 +125,7 @@ def Exibir_Janela_Criacao_Nivel(raiz):
 
     Centralizar_Janela(janela)
 
-    frame_nivel = tk.Frame(janela, bg='blue')
+    frame_nivel = tk.Frame(janela)
     frame_nivel.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
     
     frame_nivel.grid_rowconfigure(0, weight=1)
@@ -215,7 +214,7 @@ def Calcular_Tamanho_Botao(num_linhas, num_colunas):
 
 
 def Gera_Secao_Todas_As_Pecas(janela, tamanho_botao):
-    frame_pecas = tk.Frame(janela, bg='yellow')
+    frame_pecas = tk.Frame(janela)
     frame_pecas.grid(row=1, column=0, sticky='nsew', padx=10, pady=10)
     
     num_linhas_pecas = 2
@@ -291,11 +290,10 @@ def Exibir_Janela_Salvar_Nivel(raiz):
 
     janela_confirmacao.title("Salvar nível")
     janela_confirmacao.resizable(False, False)
-    janela_confirmacao.geometry('300x200')
 
-    tk.Label(janela_confirmacao, text="Nome do nível:").grid(row=0, column=0, sticky='w', pady=(0, 5))
+    tk.Label(janela_confirmacao, text="Nome do nível:").grid(row=0, column=0, sticky='w', padx=5, pady=5)
     nome_nivel = tk.Entry(janela_confirmacao, width=20)
-    nome_nivel.grid(row=0, column=1, pady=(0, 5))
+    nome_nivel.grid(row=0, column=1, padx=5, pady=5)
     nome_nivel.focus()
 
     def Persistir_Nivel():
@@ -304,8 +302,8 @@ def Exibir_Janela_Salvar_Nivel(raiz):
         messagebox.showinfo("Operação concluída", "Nível salvo com sucesso!")
         ao_fechar_janela()
 
-    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0)
-    tk.Button(janela_confirmacao, text='Salvar', command=lambda: Persistir_Nivel()).grid(row=1, column=1)
+    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0, padx=5, pady=5)
+    tk.Button(janela_confirmacao, text='Salvar', command=lambda: Persistir_Nivel()).grid(row=1, column=1, padx=5, pady=5)
 
     Centralizar_Janela(janela_confirmacao)
     janela_confirmacao.mainloop()

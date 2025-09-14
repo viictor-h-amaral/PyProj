@@ -2,7 +2,7 @@ from pathlib import Path
 import Sys.Crud as crud
 import Sys.LevelRunner as LRunner
 import tkinter as tk
-from Sys.Login import Obter_Usuario_Atual
+from Sys.Login import Obter_Usuario_Atual, Centralizar_Janela
 
 Nivel = None
 Estrutura = None
@@ -38,6 +38,7 @@ def Exibir_Meu_Nivel(nivel_id, pagina):
     janela_nivel.title(f"Nível Concluído {nivel_id}")
     janela_nivel.geometry(f'{largura_janela}x{altura_janela}')
     janela_nivel.resizable(False, False)
+    Centralizar_Janela(janela_nivel)
 
     num_linhas = len(Matriz_Estrutural)
     num_colunas = len(Matriz_Estrutural[0])
@@ -112,6 +113,8 @@ def Gerar_Pagina_Meus_Niveis(raiz):
 
     pagina.title("Meus níveis")
     pagina.geometry("800x400")
+
+    Centralizar_Janela(pagina)
 
     label = tk.Label(pagina, text="Meu níveis", font=("Arial", 16))
     label.pack(pady=20)

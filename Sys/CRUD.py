@@ -146,6 +146,14 @@ def Salvar_Estrutura(matriz):
 
     return nova_estrutura['id']
 
+def Excluir_Usuario(usuario):
+    usuarios = Carregar_Usuarios()
+    usuarios.remove(usuario)
+
+    with open(Obter_Caminho_Arquivo('Usuarios.json'), 'w', encoding='utf-8') as f:
+        json.dump(usuarios, f, indent=4, ensure_ascii=False)
+
+
 def Gerar_Id(lista_dicionarios):
     maior_id = 0
     for dicionario in lista_dicionarios:

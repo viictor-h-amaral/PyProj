@@ -53,6 +53,34 @@ def Criar_Novo_Usuario(usuario, senha, papel):
     crud.Salvar_Usuarios(usuarios)
     return True, "Usuário criado com sucesso"
 
+def Apagar_Usuario(raiz, usuario):
+    janela_confirmacao = tk.Toplevel(raiz)
+    janela_confirmacao.transient(raiz)
+    janela_confirmacao.grab_set()
+    janela_confirmacao.focus_force()
+
+    def ao_fechar_janela():
+        janela_confirmacao.destroy()
+        raiz.grab_set()
+        raiz.focus_force()
+
+    janela_confirmacao.protocol("WM_DELETE_WINDOW", ao_fechar_janela)
+
+    def Excluir_Usuario():
+        crud.Excluir_Usuario(usuario)
+        messagebox.showinfo("Sucesso", "Usuário excluído com sucesso!")
+        ao_fechar_janela()
+        Fazer_Logout(raiz)
+
+    tk.Label(janela_confirmacao, text='Confirme sua senha: ').grid(row=0, column=0, padx=5, pady=5)
+    tk.Entry(janela_confirmacao, show='*').grid(row=0, column=1, padx=5, pady=5)
+
+    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0, padx=5, pady=5)
+    tk.Button(janela_confirmacao, text='Confirmar', command=lambda: Excluir_Usuario()).grid(row=1, column=1, padx=5, pady=5)
+
+    Centralizar_Janela(janela_confirmacao)
+    janela_confirmacao.mainloop()
+
 def Tentar_Login(entrada_usuario, entrada_senha, raiz):
     global usuario_atual, janela_login
     

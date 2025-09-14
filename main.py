@@ -1,5 +1,5 @@
 import tkinter as tk
-from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout, Centralizar_Janela
+from Sys.Login import Inicializar_Sistema_Login, Obter_Usuario_Atual, Fazer_Logout, Centralizar_Janela, Apagar_Usuario
 import Sys.LevelDisplay as LDisplay
 import Sys.MyLevelsDisplay as MLDisplay
 import Sys.UsersDisplay as UDisplay
@@ -37,6 +37,15 @@ def configurar_interface_principal(raiz):
     botao_logout = tk.Button(frame_cabecalho, text="Sair", 
                           command=lambda: Fazer_Logout(raiz, lambda: print("Logout realizado")))
     botao_logout.pack(side='right', padx=20, pady=10)
+
+    def Main_Apagar_Usuario():
+        usuario = Obter_Usuario_Atual()
+        Apagar_Usuario(raiz, usuario)
+
+
+    botao_exclusao_usuario = tk.Button(frame_cabecalho, text="Apagar usuário", 
+                          command=lambda: Main_Apagar_Usuario())
+    botao_exclusao_usuario.pack(side='right', padx=20, pady=10)
     
     frame_conteudo = tk.Frame(raiz)
     frame_conteudo.pack(expand=True, fill='both', padx=20, pady=20)
@@ -44,7 +53,7 @@ def configurar_interface_principal(raiz):
     if usuario_atual['papel'] == 'admin':
         configurar_interface_admin(frame_conteudo, raiz)
     else:
-        configurar_interface_usuario(frame_conteudo)
+        configurar_interface_usuario(frame_conteudo, raiz)
 
 def configurar_interface_admin(frame, pagina):
 
@@ -57,12 +66,12 @@ def configurar_interface_admin(frame, pagina):
     tk.Button(frame, text="Criar nível", width=20, height=2, command=lambda: LCreator.Gerar_Pagina_Criacao_Nivel(pagina)).pack(pady=5)
    
 
-def configurar_interface_usuario(frame):
+def configurar_interface_usuario(frame, pagina):
     label = tk.Label(frame, text="Painel do Usuário", font=("Arial", 16))
     label.pack(pady=20)
     
     tk.Button(frame, text="Conquistas", width=20, height=2).pack(pady=5)
-    tk.Button(frame, text="Acessar níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis()).pack(pady=5)
+    tk.Button(frame, text="Acessar níveis", width=20, height=2, command=lambda: LDisplay.Gerar_Pagina_Niveis(pagina)).pack(pady=5)
 
 
 if __name__ == "__main__":
