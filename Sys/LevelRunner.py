@@ -99,39 +99,6 @@ def Valida_Nivel(matriz, coordenadas_peca_atual, pecas_seq_previa):
     if coordenadas_peca_atual == Coordenada_Peca_Inicial(matriz):
         return False
 
-''' DEEPSEEK
-def Valida_Nivel2(matriz, coordenadas_peca_atual, pecas_seq_previa):
-    # Adiciona a peça atual ao caminho (modifica a lista original)
-    pecas_seq_previa.append(coordenadas_peca_atual)
-    
-    # Verifica se chegou ao final
-    if coordenadas_peca_atual == Coordenada_Peca_Final(matriz):
-        return (True, pecas_seq_previa.copy())
-    
-    lista_proximas_pecas = []
-
-    # Verifica todas as direções
-    direcoes = [
-        (Peca_Acima_Eh_Valida, Peca_Acima),
-        (Peca_Abaixo_Eh_Valida, Peca_Abaixo),
-        (Peca_A_Esquerda_Eh_Valida, Peca_A_Esquerda),
-        (Peca_A_Direita_Eh_Valida, Peca_A_Direita)
-    ]
-    
-    for validacao, movimento in direcoes:
-        if validacao(matriz, coordenadas_peca_atual, pecas_seq_previa):
-            lista_proximas_pecas.append(movimento(coordenadas_peca_atual))
-
-    # Explora cada direção válida
-    for peca in lista_proximas_pecas:
-        resultado = Valida_Nivel(matriz, peca, pecas_seq_previa)
-        if resultado is not None:
-            return resultado
-
-    # Backtrack: remove a peça atual antes de retornar
-    pecas_seq_previa.pop()
-    return None'''
-
 def Peca_Acima_Eh_Valida(matriz, coordenadas_peca_atual, pecas_seq_atual):
     coordenadas_peca_acima = Peca_Acima(coordenadas_peca_atual)
 

@@ -83,6 +83,12 @@ def Definir_Matriz_Estrutural():
             linha.append(0)
         Matriz_Estrutural.append(linha)
 
+    coordenada_peca_inicial = LRunner.Coordenada_Peca_Inicial(Matriz_Estrutural)
+    Matriz_Estrutural[coordenada_peca_inicial[0]][coordenada_peca_inicial[1]] = 12
+
+    coordenada_peca_final = LRunner.Coordenada_Peca_Final(Matriz_Estrutural)
+    Matriz_Estrutural[coordenada_peca_final[0]][coordenada_peca_final[1]] = 14
+
 def Exibir_Janela_Criacao_Nivel(raiz):
     global num_linhas, num_colunas, Matriz_Estrutural
 
@@ -171,8 +177,8 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     
     for indice_linha in range(num_linhas):
         for indice_coluna in range(num_colunas):
-
-            imagem_inicial = LRunner.Buscar_Imagem_Peca(0, (tamanho_imagem, tamanho_imagem))
+            peca_id = Matriz_Estrutural[indice_linha][indice_coluna]
+            imagem_inicial = LRunner.Buscar_Imagem_Peca(peca_id, (tamanho_imagem, tamanho_imagem))
             janela.imagens_pecas.append(imagem_inicial)
             
             botao = tk.Button(frame_matriz_estrutural, 
@@ -263,12 +269,20 @@ def Clique_Botao_Matriz_Pecas(raiz, linha, coluna):
     if Botao_Selecionado is None: 
         return
 
-    peca_id = raiz.matriz_pecas[linha][coluna]
-    Matriz_Estrutural[Botao_Selecionado.linha][Botao_Selecionado.coluna] = peca_id
+    endereco_botao_selecionado = (Botao_Selecionado.linha, Botao_Selecionado.coluna)
+    coordenadas_pecas_final_inicial = [LRunner.Coordenada_Peca_Final(Matriz_Estrutural) , LRunner.Coordenada_Peca_Inicial(Matriz_Estrutural)]
+    nova_peca_id = raiz.matriz_pecas[linha][coluna]
+
+    if ((endereco_botao_selecionado in coordenadas_pecas_final_inicial) 
+        and nova_peca_id not in crud.Buscar_Grupo_Pecas_Por_Id(2)['pecas']):
+        messagebox.showwarning("Aviso!", "As peças inicial e final devem conter somente peças com uma única saída/entrada.")
+        return
+
+    Matriz_Estrutural[Botao_Selecionado.linha][Botao_Selecionado.coluna] = nova_peca_id
 
     tamanho_botao = Botao_Selecionado.winfo_width()
     tamanho_imagem = tamanho_botao - 2 
-    nova_imagem = LRunner.Buscar_Imagem_Peca(peca_id, (tamanho_imagem, tamanho_imagem))
+    nova_imagem = LRunner.Buscar_Imagem_Peca(nova_peca_id, (tamanho_imagem, tamanho_imagem))
     raiz.imagens_pecas.append(nova_imagem)
 
     Botao_Selecionado.config(bg='SystemButtonFace', image=nova_imagem)
