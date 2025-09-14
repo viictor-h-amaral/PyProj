@@ -42,7 +42,6 @@ def configurar_interface_principal(raiz):
         usuario = Obter_Usuario_Atual()
         Apagar_Usuario(raiz, usuario)
 
-
     botao_exclusao_usuario = tk.Button(frame_cabecalho, text="Apagar usuário", 
                           command=lambda: Main_Apagar_Usuario())
     botao_exclusao_usuario.pack(side='right', padx=20, pady=10)

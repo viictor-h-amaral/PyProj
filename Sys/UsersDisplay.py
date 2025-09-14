@@ -13,7 +13,9 @@ def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
     pagina.grab_set()
     pagina.focus_force()
     pagina.title("Usuários")
-    pagina.geometry("800x400")
+    pagina.geometry("800x500")
+
+    login.Centralizar_Janela(pagina)
 
     label = tk.Label(pagina, text="Usuários", font=("Arial", 16))
     label.pack(pady=20)
@@ -119,20 +121,7 @@ def Exibir_Alterar_Usuario(user):
     tk.Label(frame, text="Nova senha:").grid(row=1, column=0, sticky='w', pady=(0, 5))
     entrada_senha = tk.Entry(frame, width=20, show='*')
     entrada_senha.grid(row=1, column=1, pady=(0, 5))
-
-    tk.Label(frame, text="Confirmar nova senha:").grid(row=2, column=0, sticky='w', pady=(0, 10))
-    entrada_conf_senha = tk.Entry(frame, width=20, show='*')
-    entrada_conf_senha.grid(row=2, column=1, pady=(0, 10))
-
-    papel_usuario = tk.StringVar(value=usuario['papel'])
-
-    radio_adm = tk.Radiobutton(frame, text="Administrador", variable=papel_usuario, value="admin")
-    radio_adm.config(state='disabled')
-    radio_adm.grid(row=3, column=0)
-
-    radio_user = tk.Radiobutton(frame, text="Player", variable=papel_usuario, value="user")
-    radio_user.config(state='disabled')
-    radio_user.grid(row=3, column=1)
+    entrada_senha.focus()
 
     def Executar_Atualizar_Usuario():
         senha = entrada_senha.get().strip()
@@ -153,6 +142,21 @@ def Exibir_Alterar_Usuario(user):
         else:
             messagebox.showerror("Erro ao atualizar usuário!", mensagem)
 
+
+    tk.Label(frame, text="Confirmar nova senha:").grid(row=2, column=0, sticky='w', pady=(0, 10))
+    entrada_conf_senha = tk.Entry(frame, width=20, show='*')
+    entrada_conf_senha.grid(row=2, column=1, pady=(0, 10))
+    entrada_conf_senha.bind('<Return>', lambda e: Executar_Atualizar_Usuario())
+
+    papel_usuario = tk.StringVar(value=usuario['papel'])
+
+    radio_adm = tk.Radiobutton(frame, text="Administrador", variable=papel_usuario, value="admin")
+    radio_adm.config(state='disabled')
+    radio_adm.grid(row=3, column=0)
+
+    radio_user = tk.Radiobutton(frame, text="Player", variable=papel_usuario, value="user")
+    radio_user.config(state='disabled')
+    radio_user.grid(row=3, column=1)
 
     frame_botoes = tk.Frame(frame)
     frame_botoes.grid(row=4, column=0, columnspan=2, pady=5)

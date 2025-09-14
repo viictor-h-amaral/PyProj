@@ -160,3 +160,21 @@ def Gerar_Id(lista_dicionarios):
         if maior_id < dicionario['id']: maior_id = dicionario['id']
 
     return maior_id + 1
+
+def Excluir_Nivel(nivel_id):
+    nivel = Buscar_Nivel(nivel_id)
+    niveis = Buscar_Niveis()
+
+    niveis.remove(nivel)
+    with open(Obter_Caminho_Arquivo('Niveis.json'), 'w', encoding='utf-8') as f:
+        json.dump(niveis, f, indent=4, ensure_ascii=False)
+
+    Excluir_Estrutura(nivel['estrutura'])
+
+def Excluir_Estrutura(estrutura_id):
+    estrutura = Buscar_Estrutura(estrutura_id)
+    estruturas = Buscar_Estruturas()
+
+    estruturas.remove(estrutura)
+    with open(Obter_Caminho_Arquivo('Estruturas.json'), 'w', encoding='utf-8') as f:
+        json.dump(estruturas, f, indent=4, ensure_ascii=False)

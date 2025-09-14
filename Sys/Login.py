@@ -67,13 +67,20 @@ def Apagar_Usuario(raiz, usuario):
     janela_confirmacao.protocol("WM_DELETE_WINDOW", ao_fechar_janela)
 
     def Excluir_Usuario():
+        senha = senha_entry.get()
+        if not senha or codifier.Codificar_Senha(senha) != usuario['senha']:
+            messagebox.showerror("Opss", "Senha incorreta!")
+            return
         crud.Excluir_Usuario(usuario)
         messagebox.showinfo("Sucesso", "Usuário excluído com sucesso!")
         ao_fechar_janela()
         Fazer_Logout(raiz)
 
     tk.Label(janela_confirmacao, text='Confirme sua senha: ').grid(row=0, column=0, padx=5, pady=5)
-    tk.Entry(janela_confirmacao, show='*').grid(row=0, column=1, padx=5, pady=5)
+    senha_entry = tk.Entry(janela_confirmacao, show='*')
+    senha_entry.grid(row=0, column=1, padx=5, pady=5)
+    senha_entry.focus()
+    senha_entry.bind('<Return>', lambda: Excluir_Usuario())
 
     tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0, padx=5, pady=5)
     tk.Button(janela_confirmacao, text='Confirmar', command=lambda: Excluir_Usuario()).grid(row=1, column=1, padx=5, pady=5)
@@ -179,7 +186,7 @@ def Centralizar_Janela(janela):
 def Cancelar_Login(raiz):
     global janela_login
     janela_login.destroy()
-    raiz.quit()
+    raiz.destroy()
 
 def Mostrar_Janela_Login(raiz):
     global janela_login
@@ -202,7 +209,7 @@ def Mostrar_Janela_Login(raiz):
     tk.Label(frame, text="Usuário:").grid(row=0, column=0, sticky='w', pady=(0, 5))
     entrada_usuario = tk.Entry(frame, width=20)
     entrada_usuario.grid(row=0, column=1, pady=(0, 5))
-    entrada_usuario.focus()
+    entrada_usuario.focus_force()
     
     tk.Label(frame, text="Senha:").grid(row=1, column=0, sticky='w', pady=(0, 10))
     entrada_senha = tk.Entry(frame, width=20, show='*')

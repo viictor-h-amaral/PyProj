@@ -3,6 +3,8 @@ import Sys.Crud as crud
 import Sys.LevelRunner as LRunner
 import tkinter as tk
 from Sys.Login import Obter_Usuario_Atual, Centralizar_Janela
+from tkinter import messagebox
+import Sys.Codifier as codifier
 
 Nivel = None
 Estrutura = None
@@ -11,7 +13,7 @@ Matriz_Estrutural = None
 controle_meus_niveis_exibidos = [0, 10]
 Usuario_Atual = None
 
-def Exibir_Meu_Nivel(nivel_id, pagina):
+def Exibir_Meu_Nivel(nivel_id, pagina, frame_sup, frame_inf):
 
     global Nivel
     global Estrutura
@@ -63,6 +65,17 @@ def Exibir_Meu_Nivel(nivel_id, pagina):
         frame_nivel.grid_columnconfigure(j, weight=1, uniform="peca_col")
     
     tk.Label(frame_esquerda, text="Início", font=("Arial", 14), fg='green').pack(side='bottom', pady=10)
+
+    def Apagar_Nivel():
+        def Limpar_Pagina_Meus_Niveis():
+            Limpar_Exibir_Botoes_Meus_Niveis(frame_sup, frame_inf, pagina)
+            janela_nivel.destroy()
+
+        Exibir_Janela_Apagar_Nivel(pagina, nivel_id, lambda: Limpar_Pagina_Meus_Niveis())
+
+    tk.Button(frame_esquerda, text="Apagar nível", font=("Arial", 14), bg='red', fg='white',
+                            command=lambda: Apagar_Nivel()).pack(side='top', pady=10)
+
     tk.Label(frame_direita, text="Fim", font=("Arial", 14), fg='red').pack(side='top', pady=10)
 
     frame_nivel.botoes_pecas = {}
@@ -76,7 +89,7 @@ def Exibir_Meu_Nivel(nivel_id, pagina):
             botao.grid(row=indice_linha, column=indice_coluna, sticky='nsew', padx=1, pady=1)
             botoes[(indice_linha, indice_coluna)] = botao
 
-    def atualizar_imagens_concluido():
+    def atualizar_imagens_meu_nivel():
         if botoes:
             primeiro_botao = list(botoes.values())[0]
             primeiro_botao.update_idletasks()
@@ -92,7 +105,7 @@ def Exibir_Meu_Nivel(nivel_id, pagina):
                 botao.config(image=imagem_peca, state='normal')
                 botao.image = imagem_peca
 
-    janela_nivel.after(100, atualizar_imagens_concluido)
+    janela_nivel.after(100, atualizar_imagens_meu_nivel)
     janela_nivel.mainloop()
 
 def Gerar_Pagina_Meus_Niveis(raiz):
@@ -170,13 +183,13 @@ def Limpar_Exibir_Botoes_Meus_Niveis(frame_sup, frame_inf, janela_niveis):
 
         if botoes_no_frame_superior < 5:
             nivel_button = tk.Button(frame_sup, text=nivel['nome'], height=2, bg=bg, fg=fg, font=('Arial', 9, 'bold'),
-                                    command=lambda p_nivelid = nivel['id']: Exibir_Meu_Nivel(p_nivelid, janela_niveis))
+                                    command=lambda p_nivelid = nivel['id']: Exibir_Meu_Nivel(p_nivelid, janela_niveis, frame_sup, frame_inf))
             nivel_button.grid(row=0, column=botoes_no_frame_superior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_superior += 1
 
         elif botoes_no_frame_inferior < 5:
             nivel_button = tk.Button(frame_inf, text=nivel['nome'], height=2, bg=bg, fg=fg, font=('Arial', 9, 'bold'),
-                                    command=lambda p_nivelid = nivel['id']: Exibir_Meu_Nivel(p_nivelid, janela_niveis))
+                                    command=lambda p_nivelid = nivel['id']: Exibir_Meu_Nivel(p_nivelid, janela_niveis, frame_sup, frame_inf))
             nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_inferior += 1
 
@@ -229,3 +242,39 @@ def Calcular_Tamanho_Janela(matriz):
     altura_total = altura_nivel + 100    # +100 para margens superior e inferior
     
     return largura_total, altura_total, tamanho_celula
+
+def Exibir_Janela_Apagar_Nivel(raiz, nivel_id, callback = None):
+    janela_confirmacao = tk.Toplevel(raiz)
+    janela_confirmacao.transient(raiz)
+    janela_confirmacao.grab_set()
+    janela_confirmacao.focus_force()
+
+    def ao_fechar_janela():
+        janela_confirmacao.destroy()
+        raiz.grab_set()
+        raiz.focus_force()
+
+    janela_confirmacao.protocol("WM_DELETE_WINDOW", ao_fechar_janela)
+
+    def Excluir_Nivel():
+        senha = senha_entry.get()
+        if not senha or codifier.Codificar_Senha(senha) != Obter_Usuario_Atual()['senha']:
+            messagebox.showerror("Opss", "Senha incorreta!")
+            return
+        crud.Excluir_Nivel(nivel_id)
+        messagebox.showinfo("Sucesso", "Nível excluído com sucesso!")
+        ao_fechar_janela()
+        if callback:
+            callback()
+
+    tk.Label(janela_confirmacao, text='Confirme sua senha: ').grid(row=0, column=0, padx=5, pady=5)
+    senha_entry = tk.Entry(janela_confirmacao, show='*')
+    senha_entry.grid(row=0, column=1, padx=5, pady=5)
+    senha_entry.focus()
+    senha_entry.bind('<Return>', lambda e: Excluir_Nivel())
+
+    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0, padx=5, pady=5)
+    tk.Button(janela_confirmacao, text='Confirmar', command=lambda: Excluir_Nivel()).grid(row=1, column=1, padx=5, pady=5)
+
+    Centralizar_Janela(janela_confirmacao)
+    janela_confirmacao.mainloop()

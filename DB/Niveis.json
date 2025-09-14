@@ -1,33 +1,5 @@
 [
     {
-        "id": 1,
-        "nome": "Primeiro de muitos",
-        "dificuldade": "Facil",
-        "estrutura": 1,
-        "criador": "admin"
-    },
-    {
-        "id": 2,
-        "nome": "Primeiro de muitos2",
-        "dificuldade": "Fácil",
-        "estrutura": 2,
-        "criador": "admin"
-    },
-    {
-        "id": 3,
-        "nome": "Primeiro de muitos3",
-        "dificuldade": "Facil",
-        "estrutura": 3,
-        "criador": "admin"
-    },
-    {
-        "id": 4,
-        "nome": "Primeiro de muitos4",
-        "dificuldade": "Facil",
-        "estrutura": 4,
-        "criador": "admin"
-    },
-    {
         "id": 5,
         "nome": "Primeiro de muitos5",
         "dificuldade": "medio",
@@ -82,54 +54,5 @@
         "dificuldade": "dificil",
         "estrutura": 2,
         "criador": "victor"
-    },
-    {
-        "id": 13,
-        "nome": "primeiro natural",
-        "dificuldade": "facil",
-        "estrutura": 5,
-        "criador": "admin"
-    },
-    {
-        "id": 14,
-        "nome": "nivel_a",
-        "dificuldade": "facil",
-        "estrutura": 6,
-        "criador": "admin"
-    },
-    {
-        "id": 15,
-        "nome": "nivel_b",
-        "dificuldade": "facil",
-        "estrutura": 7,
-        "criador": "admin"
-    },
-    {
-        "id": 16,
-        "nome": "nivel_5x5",
-        "dificuldade": "facil",
-        "estrutura": 8,
-        "criador": "admin"
-    },
-    {
-        "id": 17,
-        "nome": "nivel_correcao_botoes__loop",
-        "dificuldade": "facil",
-        "estrutura": 9,
-        "criador": "admin"
-    },
-    {
-        "id": 18,
-        "nome": "nivel da camila",
-        "dificuldade": "facil",
-        "estrutura": 10,
-        "criador": "admin"
-    },
-    {
-        "id": 19,
-        "nome": "Desafio para a Camila",
-        "dificuldade": "facil",
-        "estrutura": 11,
-        "criador": "admin"
     }
 ]
