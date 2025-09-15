@@ -1,3 +1,26 @@
+"""
+Módulo de Gerenciamento de Usuários (Tkinter)
+---------------------------------------------
+
+Este módulo fornece a interface gráfica para o gerenciamento de usuários do sistema,
+permitindo:
+
+- Listagem paginada de usuários (10 por vez).
+- Avançar e recuar entre páginas de usuários.
+- Seleção de um usuário para alteração de senha.
+- Atualização da senha de um usuário no banco de dados.
+
+Dependências:
+- tkinter: construção da interface gráfica.
+- Sys.Crud: operações CRUD de usuários (carregar, salvar, atualizar).
+- Sys.Login: funções auxiliares de login (ex: centralizar janelas).
+- Sys.Codifier: responsável por codificar senhas.
+- Sys.WindowsPattern: contém padrões de fonte e cores para padronizar a interface.
+
+Variáveis globais:
+- controle_usuarios_exibidos: define o intervalo [início, fim] de usuários exibidos na tela.
+"""
+
 import tkinter as tk
 import Sys.Crud as crud
 import Sys.Login as login
@@ -5,10 +28,22 @@ from tkinter import messagebox
 import Sys.Codifier as codifier
 import Sys.WindowsPattern as pattern
 
+# Intervalo inicial de exibição de usuários (primeira "página" de 10 registros)
 controle_usuarios_exibidos = [0, 10]
 
-def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
 
+def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
+    """
+    Cria e exibe a janela principal de gerenciamento de usuários.
+
+    Args:
+        raiz (tk.Tk): janela principal da aplicação.
+
+    Recursos da janela:
+    - Exibe botões com os usuários cadastrados (10 por página).
+    - Botões "<" e ">" permitem navegar entre páginas de usuários.
+    - Cada botão de usuário abre a tela de alteração de senha.
+    """
     pagina = tk.Toplevel(raiz)
     pagina.transient(raiz)
     pagina.grab_set()
@@ -30,7 +65,6 @@ def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
     frame_botoes_avancar_recuar = tk.Frame(pagina)
     frame_botoes_avancar_recuar.pack(pady=20, fill='both', expand=True)
 
-
     frame_usuarios_superior = tk.Frame(frame_usuarios)
     frame_usuarios_superior.pack(fill='x', pady=5, expand=True)
 
@@ -49,7 +83,16 @@ def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
 
     pagina.mainloop()
 
+
 def Recuar_Exibicao_Usuarios(quantidade_voltar, frame_sup, frame_inf):
+    """
+    Move a exibição de usuários para trás (página anterior).
+
+    Args:
+        quantidade_voltar (int): quantidade de usuários a recuar (normalmente 10).
+        frame_sup (tk.Frame): frame superior onde os botões de usuários são exibidos.
+        frame_inf (tk.Frame): frame inferior onde os botões de usuários são exibidos.
+    """
     global controle_usuarios_exibidos
     if (controle_usuarios_exibidos[0] - quantidade_voltar < 0):
         return
@@ -58,7 +101,16 @@ def Recuar_Exibicao_Usuarios(quantidade_voltar, frame_sup, frame_inf):
     controle_usuarios_exibidos[1] -= quantidade_voltar
     Limpar_Exibir_Botoes_Usuarios(frame_sup, frame_inf)
 
+
 def Avancar_Exibicao_Usuarios(quantidade_avancar, frame_sup, frame_inf):
+    """
+    Move a exibição de usuários para frente (próxima página).
+
+    Args:
+        quantidade_avancar (int): quantidade de usuários a avançar (normalmente 10).
+        frame_sup (tk.Frame): frame superior onde os botões de usuários são exibidos.
+        frame_inf (tk.Frame): frame inferior onde os botões de usuários são exibidos.
+    """
     global controle_usuarios_exibidos
 
     quantidade_usuarios_existente = len(crud.Carregar_Usuarios())
@@ -71,7 +123,20 @@ def Avancar_Exibicao_Usuarios(quantidade_avancar, frame_sup, frame_inf):
     controle_usuarios_exibidos[1] += quantidade_avancar
     Limpar_Exibir_Botoes_Usuarios(frame_sup, frame_inf)
 
+
 def Limpar_Exibir_Botoes_Usuarios(frame_sup, frame_inf):
+    """
+    Limpa os frames e exibe os botões correspondentes aos usuários
+    no intervalo definido por `controle_usuarios_exibidos`.
+
+    Args:
+        frame_sup (tk.Frame): frame superior da janela de usuários.
+        frame_inf (tk.Frame): frame inferior da janela de usuários.
+
+    Observações:
+    - Exibe até 10 usuários por página, distribuídos em dois frames (5 em cima, 5 embaixo).
+    - Cada botão é associado ao evento de abrir a tela de alteração de senha.
+    """
     for widget in frame_sup.winfo_children():
         widget.destroy()
 
@@ -111,8 +176,23 @@ def Limpar_Exibir_Botoes_Usuarios(frame_sup, frame_inf):
 
         else: break
 
-def Exibir_Alterar_Usuario(user):
 
+def Exibir_Alterar_Usuario(user):
+    """
+    Abre uma janela para alterar a senha de um usuário específico.
+
+    Args:
+        user (str|int): nome ou ID do usuário a ser editado.
+
+    Recursos da janela:
+    - Campo somente leitura com o nome do usuário.
+    - Campos para digitar e confirmar a nova senha.
+    - Botões "Salvar" e "Cancelar".
+    - Validações:
+        * Campos obrigatórios.
+        * Senha e confirmação devem coincidir.
+    - Chama `Atualizar_Usuario` para aplicar a alteração.
+    """
     usuario = crud.Carregar_Usuario(user)
     
     janela_usuario = tk.Toplevel()
@@ -155,6 +235,7 @@ def Exibir_Alterar_Usuario(user):
     entrada_senha.focus()
 
     def Executar_Atualizar_Usuario():
+        """Valida e executa a atualização da senha do usuário."""
         senha = entrada_senha.get().strip()
         confirmar_senha = entrada_conf_senha.get().strip()
 
@@ -230,7 +311,26 @@ def Exibir_Alterar_Usuario(user):
 
     janela_usuario.mainloop()
 
+
 def Atualizar_Usuario(usuario, nova_senha):
+    """
+    Atualiza a senha de um usuário no banco de dados.
+
+    Args:
+        usuario (str): nome do usuário a ser atualizado.
+        nova_senha (str): nova senha em texto plano.
+
+    Returns:
+        tuple: (sucesso: bool, mensagem: str)
+            - True, "Usuário atualizado com sucesso" em caso de êxito.
+            - False, mensagem de erro em caso de falha.
+
+    Funcionamento:
+    - Carrega todos os usuários do banco.
+    - Localiza o usuário a ser atualizado.
+    - Codifica a nova senha usando `codifier.Codificar_Senha`.
+    - Salva a lista atualizada de usuários.
+    """
     usuarios = crud.Carregar_Usuarios()
 
     usuario_atual = crud.Carregar_Usuario(usuario)
