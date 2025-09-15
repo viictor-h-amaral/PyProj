@@ -3,6 +3,7 @@ from tkinter import messagebox
 import json
 import Sys.Crud as crud
 import Sys.Codifier as codifier
+import Sys.WindowsPattern as pattern
 
 usuario_atual = None
 callback_login_sucesso = None
@@ -76,14 +77,37 @@ def Apagar_Usuario(raiz, usuario):
         ao_fechar_janela()
         Fazer_Logout(raiz)
 
-    tk.Label(janela_confirmacao, text='Confirme sua senha: ').grid(row=0, column=0, padx=5, pady=5)
-    senha_entry = tk.Entry(janela_confirmacao, show='*')
+    tk.Label(   janela_confirmacao, 
+                text='Confirme sua senha: ',
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, padx=5, pady=5)
+
+    senha_entry = tk.Entry( janela_confirmacao, 
+                            show='*',
+                            font=pattern.fonte_texto,
+                            fg=pattern.cor_fonte_padrao)
     senha_entry.grid(row=0, column=1, padx=5, pady=5)
     senha_entry.focus()
     senha_entry.bind('<Return>', lambda: Excluir_Usuario())
 
-    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0, padx=5, pady=5)
-    tk.Button(janela_confirmacao, text='Confirmar', command=lambda: Excluir_Usuario()).grid(row=1, column=1, padx=5, pady=5)
+    tk.Button(  janela_confirmacao, 
+                text='Cancelar', 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_clara, 
+                bg=pattern.cor_escura_paleta, 
+                width=15,
+                command=lambda: ao_fechar_janela()
+            ).grid(row=1, column=0, padx=5, pady=5)
+
+    tk.Button(  janela_confirmacao, 
+                text='Confirmar',
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao, 
+                bg=pattern.cor_fria_paleta, 
+                width=15, 
+                command=lambda: Excluir_Usuario()
+            ).grid(row=1, column=1, padx=5, pady=5)
 
     Centralizar_Janela(janela_confirmacao)
     janela_confirmacao.mainloop()
@@ -113,36 +137,80 @@ def Mostrar_Janela_Novo_Usuario(entrada_usuario, entrada_senha):
     
     janela_novo = tk.Toplevel(janela_login)
     janela_novo.title("Novo Usuário")
-    janela_novo.geometry("300x200")
+    janela_novo.geometry("400x200")
     janela_novo.resizable(False, False)
     janela_novo.transient(janela_login)
     janela_novo.grab_set()
     
     Centralizar_Janela(janela_novo)
     
-    frame = tk.Frame(janela_novo, padx=20, pady=20)
-    frame.pack(expand=True, fill='both')
+    frame = tk.Frame(janela_novo)
+    frame.grid(row=0, column=0, padx=5, pady=5)
     
-    tk.Label(frame, text="Novo Usuário:").grid(row=0, column=0, sticky='w', pady=(0, 5))
-    entrada_novo_user = tk.Entry(frame, width=20)
+    tk.Label(   frame, 
+                text="Novo Usuário: ", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, sticky='w', pady=(0, 5))
+
+    entrada_novo_user = tk.Entry(   frame, 
+                                    width=20, 
+                                    font=pattern.fonte_texto, 
+                                    fg=pattern.cor_fonte_padrao)
     entrada_novo_user.grid(row=0, column=1, pady=(0, 5))
     entrada_novo_user.focus()
     
-    tk.Label(frame, text="Nova Senha:").grid(row=1, column=0, sticky='w', pady=(0, 5))
-    entrada_nova_senha = tk.Entry(frame, width=20, show='*')
+    tk.Label(   frame, 
+                text="Nova Senha: ", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=1, column=0, sticky='w', pady=(0, 5))
+
+    entrada_nova_senha = tk.Entry(  frame, 
+                                    width=20, 
+                                    show='*',
+                                    font=pattern.fonte_texto,
+                                    fg=pattern.cor_fonte_padrao)
     entrada_nova_senha.grid(row=1, column=1, pady=(0, 5))
     
-    tk.Label(frame, text="Confirmar Senha:").grid(row=2, column=0, sticky='w', pady=(0, 10))
-    entrada_conf_senha = tk.Entry(frame, width=20, show='*')
+    tk.Label(   frame, 
+                text="Confirmar Senha:", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=2, column=0, sticky='w', pady=(0, 10))
+
+    entrada_conf_senha = tk.Entry(  frame, 
+                                    width=20, 
+                                    show='*', 
+                                    font=pattern.fonte_texto,
+                                    fg=pattern.cor_fonte_padrao)
     entrada_conf_senha.grid(row=2, column=1, pady=(0, 10))
 
+    frame_papel = tk.Frame(janela_novo)
+    frame_papel.grid(row=1, column=0)
+
+    tk.Label(   frame_papel, 
+                text="Papel:", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, sticky='w', pady=(0, 10))
+
     papel_novo_usuario = tk.StringVar(value="user")
-    radio_adm = tk.Radiobutton(frame, text="Administrador", variable=papel_novo_usuario, value="admin")
-    radio_adm.grid(row=3, column=0)
+    radio_adm = tk.Radiobutton( frame_papel, 
+                                text="Administrador", 
+                                font=pattern.fonte_texto, 
+                                fg=pattern.cor_fonte_padrao,
+                                variable=papel_novo_usuario, 
+                                value="admin")
+    radio_adm.grid(row=0, column=1)
 
-    radio_user = tk.Radiobutton(frame, text="Player", variable=papel_novo_usuario, value="user")
-    radio_user.grid(row=3, column=1)
-
+    radio_user = tk.Radiobutton(frame_papel, 
+                                text="Player", 
+                                font=pattern.fonte_texto, 
+                                fg=pattern.cor_fonte_padrao, 
+                                variable=papel_novo_usuario, 
+                                value="user")
+    radio_user.grid(row=0, column=2)
 
     def Executar_Criar_Usuario():
         usuario = entrada_novo_user.get().strip()
@@ -169,11 +237,26 @@ def Mostrar_Janela_Novo_Usuario(entrada_usuario, entrada_senha):
         else:
             messagebox.showerror("Erro", mensagem)
     
-    frame_botoes = tk.Frame(frame)
-    frame_botoes.grid(row=4, column=0, columnspan=2, pady=5)
+    frame_botoes = tk.Frame(janela_novo)
+    frame_botoes.grid(row=2, column=0, pady=5, padx=5)
     
-    tk.Button(frame_botoes, text="Criar", command=Executar_Criar_Usuario, width=10).pack(side='left', padx=5)
-    tk.Button(frame_botoes, text="Cancelar", command=janela_novo.destroy, width=10).pack(side='left', padx=5)
+    tk.Button(  frame_botoes, 
+                text="Criar",
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao,
+                bg=pattern.cor_fria_paleta,
+                command=Executar_Criar_Usuario, 
+                width=10
+            ).pack(side='right', padx=5)
+
+    tk.Button(  frame_botoes, 
+                text="Cancelar",
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_clara,
+                bg=pattern.cor_escura_paleta,
+                command=janela_novo.destroy, 
+                width=10
+            ).pack(side='left', padx=5)
 
 def Centralizar_Janela(janela):
     janela.update_idletasks()
@@ -195,32 +278,68 @@ def Mostrar_Janela_Login(raiz):
     
     janela_login = tk.Toplevel(raiz)
     janela_login.title("Login")
-    janela_login.geometry("300x200")
+    janela_login.geometry("380x150")
     janela_login.resizable(False, False)
-    #janela_login.transient(raiz)
     janela_login.grab_set()
     janela_login.focus_force()
     
     Centralizar_Janela(janela_login)
     
-    frame = tk.Frame(janela_login, padx=20, pady=20)
-    frame.pack(expand=True, fill='both')
+    frame = tk.Frame(janela_login)
+    frame.grid(row=0, column=0, padx=5, pady=15)#pack(expand=True, fill='both', anchor='n')
     
-    tk.Label(frame, text="Usuário:").grid(row=0, column=0, sticky='w', pady=(0, 5))
-    entrada_usuario = tk.Entry(frame, width=20)
+    tk.Label(   frame, 
+                text="Usuário: ",
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, sticky='w', pady=(0, 5))
+
+    entrada_usuario = tk.Entry( frame, 
+                                width=20,
+                                font=pattern.fonte_texto,
+                                fg=pattern.cor_fonte_padrao)
     entrada_usuario.grid(row=0, column=1, pady=(0, 5))
     entrada_usuario.focus_force()
     
-    tk.Label(frame, text="Senha:").grid(row=1, column=0, sticky='w', pady=(0, 10))
-    entrada_senha = tk.Entry(frame, width=20, show='*')
+    tk.Label(   frame, 
+                text="Senha: ",
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=1, column=0, sticky='w', pady=(0, 10))
+
+    entrada_senha = tk.Entry(   frame, 
+                                width=20, 
+                                show='*', 
+                                font=pattern.fonte_texto,
+                                fg=pattern.cor_fonte_padrao)
     entrada_senha.grid(row=1, column=1, pady=(0, 10))
     
-    frame_botoes = tk.Frame(frame)
-    frame_botoes.grid(row=2, column=0, columnspan=2, pady=10)
+    frame_botoes = tk.Frame(janela_login)
+    frame_botoes.grid(row=1, column=0, pady=5, padx=5)
     
-    tk.Button(frame_botoes, text="Login", command=lambda: Tentar_Login(entrada_usuario, entrada_senha, raiz), width=10).pack(side='left', padx=5)
-    tk.Button(frame_botoes, text="Novo Usuário", command=lambda: Mostrar_Janela_Novo_Usuario(entrada_usuario, entrada_senha), width=10).pack(side='left', padx=5)
-    tk.Button(frame_botoes, text="Cancelar", command=lambda: Cancelar_Login(raiz), width=10).pack(side='left', padx=5)
+    tk.Button(  frame_botoes, 
+                text="Login",
+                font=pattern.fonte_cabecalho_11,
+                fg=pattern.cor_fonte_clara,
+                bg=pattern.cor_quente_paleta,
+                command=lambda: Tentar_Login(entrada_usuario, entrada_senha, raiz)
+            ).pack(side='right', padx=5)
+
+    tk.Button(  frame_botoes, 
+                text="Novo Usuário",
+                font=pattern.fonte_cabecalho_11,
+                fg=pattern.cor_fonte_padrao,
+                bg=pattern.cor_fria_paleta, 
+                command=lambda: Mostrar_Janela_Novo_Usuario(entrada_usuario, entrada_senha)
+            ).pack(side='right', padx=5)
+
+    tk.Button(  frame_botoes, 
+                text="Cancelar",
+                font=pattern.fonte_cabecalho_11,
+                fg=pattern.cor_fonte_clara,
+                bg=pattern.cor_escura_paleta,
+                command=lambda: Cancelar_Login(raiz)
+            ).pack(side='left', padx=5)
     
     entrada_senha.bind('<Return>', lambda e: Tentar_Login(entrada_usuario, entrada_senha, raiz))
 

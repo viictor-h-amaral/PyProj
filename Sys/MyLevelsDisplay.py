@@ -5,6 +5,7 @@ import tkinter as tk
 from Sys.Login import Obter_Usuario_Atual, Centralizar_Janela
 from tkinter import messagebox
 import Sys.Codifier as codifier
+import Sys.WindowsPattern as pattern
 
 Nivel = None
 Estrutura = None
@@ -64,7 +65,11 @@ def Exibir_Meu_Nivel(nivel_id, pagina, frame_sup, frame_inf):
     for j in range(num_colunas):
         frame_nivel.grid_columnconfigure(j, weight=1, uniform="peca_col")
     
-    tk.Label(frame_esquerda, text="Início", font=("Arial", 14), fg='green').pack(side='bottom', pady=10)
+    tk.Label(   frame_esquerda, 
+                text="Início", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_fria_paleta
+            ).pack(side='bottom', pady=10)
 
     def Apagar_Nivel():
         def Limpar_Pagina_Meus_Niveis():
@@ -73,10 +78,19 @@ def Exibir_Meu_Nivel(nivel_id, pagina, frame_sup, frame_inf):
 
         Exibir_Janela_Apagar_Nivel(pagina, nivel_id, lambda: Limpar_Pagina_Meus_Niveis())
 
-    tk.Button(frame_esquerda, text="Apagar nível", font=("Arial", 14), bg='red', fg='white',
-                            command=lambda: Apagar_Nivel()).pack(side='top', pady=10)
+    tk.Button(frame_esquerda, 
+text="Apagar nível", 
+font=pattern.fonte_cabecalho_12, 
+bg=pattern.cor_quente_paleta, 
+fg=pattern.cor_fonte_padrao,
+command=lambda: Apagar_Nivel()
+).pack(side='top', pady=10)
 
-    tk.Label(frame_direita, text="Fim", font=("Arial", 14), fg='red').pack(side='top', pady=10)
+    tk.Label(   frame_direita, 
+                text="Fim", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_quente_paleta
+            ).pack(side='top', pady=10)
 
     frame_nivel.botoes_pecas = {}
     frame_nivel.pecas_ids = {}
@@ -129,7 +143,10 @@ def Gerar_Pagina_Meus_Niveis(raiz):
 
     Centralizar_Janela(pagina)
 
-    label = tk.Label(pagina, text="Meu níveis", font=("Arial", 16))
+    label = tk.Label(   pagina, 
+                        text="Meus níveis", 
+                        font=pattern.fonte_cabecalho_22,
+                        fg=pattern.cor_fonte_padrao)
     label.pack(pady=20)
 
     frame_niveis = tk.Frame(pagina)
@@ -144,12 +161,12 @@ def Gerar_Pagina_Meus_Niveis(raiz):
     frame_niveis_inferior = tk.Frame(frame_niveis)
     frame_niveis_inferior.pack(fill='x', pady=5, expand=True)
 
-    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='#3b68ff', 
-                                        font=('Arial', 16), command=lambda: Recuar_Exibicao_Meus_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
+    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg=pattern.cor_branca_paleta, bg='#3b68ff', 
+                                        font=pattern.fonte_cabecalho_11, command=lambda: Recuar_Exibicao_Meus_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
     botao_recuar.pack(fill='x', pady=5, expand=True)
 
-    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='#ff3b3b', 
-                                        font=('Arial', 16), command=lambda: Avancar_Exibicao_Meus_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
+    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg=pattern.cor_branca_paleta, bg='#ff3b3b', 
+                                        font=pattern.fonte_cabecalho_11, command=lambda: Avancar_Exibicao_Meus_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
     botao_avancar.pack(fill='x', pady=5, expand=True)
 
     Limpar_Exibir_Botoes_Meus_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina)
@@ -175,20 +192,29 @@ def Limpar_Exibir_Botoes_Meus_Niveis(frame_sup, frame_inf, janela_niveis):
 
     for nivel in niveis:
         bg = 'white'
-        fg = 'black'
+        fg = pattern.cor_fonte_niveis
         match (nivel['dificuldade'].upper()):
-            case 'FACIL': bg = '#a3ffa8' 
-            case 'MEDIO': bg = '#fcffa3'
-            case 'DIFICIL': bg = '#ff8787'
+            case 'FACIL': bg = pattern.verde 
+            case 'MEDIO': bg = pattern.amarelo
+            case 'DIFICIL': bg = pattern.vermelho
 
         if botoes_no_frame_superior < 5:
-            nivel_button = tk.Button(frame_sup, text=nivel['nome'], height=2, bg=bg, fg=fg, font=('Arial', 9, 'bold'),
+            nivel_button = tk.Button(frame_sup, 
+                                    text=nivel['nome'], 
+                                    height=2, bg=bg, 
+                                    fg=fg, 
+                                    font=pattern.fonte_cabecalho_12,
                                     command=lambda p_nivelid = nivel['id']: Exibir_Meu_Nivel(p_nivelid, janela_niveis, frame_sup, frame_inf))
             nivel_button.grid(row=0, column=botoes_no_frame_superior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_superior += 1
 
         elif botoes_no_frame_inferior < 5:
-            nivel_button = tk.Button(frame_inf, text=nivel['nome'], height=2, bg=bg, fg=fg, font=('Arial', 9, 'bold'),
+            nivel_button = tk.Button(frame_inf, 
+                                    text=nivel['nome'], 
+                                    height=2, 
+                                    bg=bg, 
+                                    fg=fg, 
+                                    font=pattern.fonte_cabecalho_12,
                                     command=lambda p_nivelid = nivel['id']: Exibir_Meu_Nivel(p_nivelid, janela_niveis, frame_sup, frame_inf))
             nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_inferior += 1
@@ -267,14 +293,35 @@ def Exibir_Janela_Apagar_Nivel(raiz, nivel_id, callback = None):
         if callback:
             callback()
 
-    tk.Label(janela_confirmacao, text='Confirme sua senha: ').grid(row=0, column=0, padx=5, pady=5)
-    senha_entry = tk.Entry(janela_confirmacao, show='*')
+    tk.Label(   janela_confirmacao, 
+                text='Confirme sua senha: ',
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, padx=5, pady=5)
+
+    senha_entry = tk.Entry( janela_confirmacao, 
+                            show='*',
+                            font=pattern.fonte_texto,
+                            fg=pattern.cor_fonte_padrao)
     senha_entry.grid(row=0, column=1, padx=5, pady=5)
     senha_entry.focus()
     senha_entry.bind('<Return>', lambda e: Excluir_Nivel())
 
-    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=1, column=0, padx=5, pady=5)
-    tk.Button(janela_confirmacao, text='Confirmar', command=lambda: Excluir_Nivel()).grid(row=1, column=1, padx=5, pady=5)
+    tk.Button(  janela_confirmacao, 
+                text='Cancelar',
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_clara,
+                bg=pattern.cor_escura_paleta, 
+                command=lambda: ao_fechar_janela()
+            ).grid(row=1, column=0, padx=5, pady=5)
+
+    tk.Button(janela_confirmacao, 
+                text='Confirmar',
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao,
+                bg=pattern.cor_fria_paleta,
+                command=lambda: Excluir_Nivel()
+            ).grid(row=1, column=1, padx=5, pady=5)
 
     Centralizar_Janela(janela_confirmacao)
     janela_confirmacao.mainloop()

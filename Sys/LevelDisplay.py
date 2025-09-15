@@ -5,6 +5,7 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from Sys.Login import Obter_Usuario_Atual, Atualizar_Usuario_Atual, Centralizar_Janela
+import Sys.WindowsPattern as pattern
 
 Nivel = None
 Estrutura = None
@@ -72,8 +73,17 @@ def Exibir_Nivel_Concluido(nivel_id, pagina):
     for j in range(num_colunas):
         frame_nivel.grid_columnconfigure(j, weight=1, uniform="peca_col")
     
-    tk.Label(frame_esquerda, text="Início", font=("Arial", 14), fg='green').pack(side='bottom', pady=10)
-    tk.Label(frame_direita, text="Fim", font=("Arial", 14), fg='red').pack(side='top', pady=10)
+    tk.Label(frame_esquerda, 
+                text="Início", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_fria_paleta
+            ).pack(side='bottom', pady=10)
+
+    tk.Label(   frame_direita, 
+                text="Fim", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_quente_paleta
+            ).pack(side='top', pady=10)
     
     janela_nivel = frame_nivel
     janela_nivel.imagens_pecas = []
@@ -82,7 +92,8 @@ def Exibir_Nivel_Concluido(nivel_id, pagina):
     botoes = {}
     for indice_linha in range(num_linhas):
         for indice_coluna in range(num_colunas):
-            botao = tk.Button(janela_nivel, state='disabled')
+            botao = tk.Button(  janela_nivel, 
+                                state='disabled')
             botao.grid(row=indice_linha, column=indice_coluna, sticky='nsew', padx=1, pady=1)
             botoes[(indice_linha, indice_coluna)] = botao
     
@@ -159,8 +170,17 @@ def Exibir_Nivel_Incompleto(nivel_id, pagina):
         frame_nivel.grid_columnconfigure(j, weight=1, uniform="peca_col")
     
     # Labels de início e fim
-    tk.Label(frame_esquerda, text="Início", font=("Arial", 14), fg='green').pack(side='bottom', pady=10)
-    tk.Label(frame_direita, text="Fim", font=("Arial", 14), fg='red').pack(side='top', pady=10)
+    tk.Label(   frame_esquerda, 
+                text="Início", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_fria_paleta
+            ).pack(side='bottom', pady=10)
+
+    tk.Label(   frame_direita, 
+                text="Fim", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_quente_paleta
+            ).pack(side='top', pady=10)
     
     # Mantém referência às imagens
     janela_nivel = frame_nivel
@@ -254,7 +274,10 @@ def Gerar_Pagina_Niveis(raiz):
     pagina.geometry("800x400")
     Centralizar_Janela(pagina)
 
-    label = tk.Label(pagina, text="Níveis", font=("Arial", 16))
+    label = tk.Label(pagina, 
+                    text="Níveis", 
+                    font=pattern.fonte_cabecalho_22,
+                    fg=pattern.cor_fonte_padrao)
     label.pack(pady=20)
 
     frame_niveis = tk.Frame(pagina)
@@ -269,12 +292,12 @@ def Gerar_Pagina_Niveis(raiz):
     frame_niveis_inferior = tk.Frame(frame_niveis)
     frame_niveis_inferior.pack(fill='x', pady=5, expand=True)
 
-    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='#3b68ff', 
-                                        font=('Arial', 16), command=lambda: Recuar_Exibicao_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
+    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg=pattern.cor_branca_paleta, bg='#3b68ff', 
+                                        font=pattern.fonte_cabecalho_11, command=lambda: Recuar_Exibicao_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
     botao_recuar.pack(fill='x', pady=5, expand=True)
 
-    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='#ff3b3b', 
-                                        font=('Arial', 16), command=lambda: Avancar_Exibicao_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
+    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg=pattern.cor_branca_paleta, bg='#ff3b3b', 
+                                        font=pattern.fonte_cabecalho_11, command=lambda: Avancar_Exibicao_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina))
     botao_avancar.pack(fill='x', pady=5, expand=True)
 
     Limpar_Exibir_Botoes_Niveis(frame_niveis_superior, frame_niveis_inferior, pagina)
@@ -300,21 +323,31 @@ def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, janela_niveis):
 
     for nivel in niveis:
         bg = 'white'
-        fg = 'black'
+        fg = pattern.cor_fonte_niveis
         match (nivel['dificuldade'].upper()):
-            case 'FACIL': bg = '#a3ffa8' 
-            case 'MEDIO': bg = '#fcffa3'
-            case 'DIFICIL': bg = '#ff8787'
+            case 'FACIL': bg = pattern.verde 
+            case 'MEDIO': bg = pattern.amarelo
+            case 'DIFICIL': bg = pattern.vermelho
 
         if botoes_no_frame_superior < 5:
-            nivel_button = tk.Button(frame_sup, text=nivel['nome'], height=2, bg = bg, fg=fg, font=('Arial', 9, 'bold'),
-                                   command=lambda p_nivelid=nivel['id']: Exibir_Nivel(p_nivelid, janela_niveis))
+            nivel_button = tk.Button(   frame_sup, 
+                                        text=nivel['nome'], 
+                                        height=2, 
+                                        bg = bg, 
+                                        fg=fg, 
+                                        font=pattern.fonte_cabecalho_12,
+                                        command=lambda p_nivelid=nivel['id']: Exibir_Nivel(p_nivelid, janela_niveis))
             nivel_button.grid(row=0, column=botoes_no_frame_superior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_superior += 1
 
         elif botoes_no_frame_inferior < 5:
-            nivel_button = tk.Button(frame_inf, text=nivel['nome'], height=2, bg = bg, fg=fg, font=('Arial', 9, 'bold'),
-                                   command=lambda p_nivelid=nivel['id']: Exibir_Nivel(p_nivelid, janela_niveis))
+            nivel_button = tk.Button(   frame_inf, 
+                                        text=nivel['nome'], 
+                                        height=2, 
+                                        bg = bg, 
+                                        fg=fg, 
+                                        font=pattern.fonte_cabecalho_12,
+                                        command=lambda p_nivelid=nivel['id']: Exibir_Nivel(p_nivelid, janela_niveis))
             nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_inferior += 1
 

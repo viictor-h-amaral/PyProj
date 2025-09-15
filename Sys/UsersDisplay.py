@@ -3,6 +3,7 @@ import Sys.Crud as crud
 import Sys.Login as login
 from tkinter import messagebox
 import Sys.Codifier as codifier
+import Sys.WindowsPattern as pattern
 
 controle_usuarios_exibidos = [0, 10]
 
@@ -17,7 +18,10 @@ def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
 
     login.Centralizar_Janela(pagina)
 
-    label = tk.Label(pagina, text="Usuários", font=("Arial", 16))
+    label = tk.Label(   pagina, 
+                        text="Usuários", 
+                        font=pattern.fonte_cabecalho_22,
+                        fg=pattern.cor_fonte_padrao)
     label.pack(pady=20)
 
     frame_usuarios = tk.Frame(pagina)
@@ -33,12 +37,12 @@ def Gerar_Pagina_Gerenciamento_Usuarios(raiz):
     frame_usuarios_inferior = tk.Frame(frame_usuarios)
     frame_usuarios_inferior.pack(fill='x', pady=5, expand=True)
 
-    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg='white', bg='#3b68ff', 
-                                        font=('Arial', 16), command=lambda: Recuar_Exibicao_Usuarios(10, frame_usuarios_superior, frame_usuarios_inferior))
+    botao_recuar = tk.Button(frame_botoes_avancar_recuar, text='<', fg=pattern.cor_branca_paleta, bg='#3b68ff', 
+                                        font=pattern.fonte_cabecalho_11, command=lambda: Recuar_Exibicao_Usuarios(10, frame_usuarios_superior, frame_usuarios_inferior))
     botao_recuar.pack(fill='x', pady=5, expand=True)
 
-    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg='white', bg='#ff3b3b', 
-                                        font=('Arial', 16), command=lambda: Avancar_Exibicao_Usuarios(10, frame_usuarios_superior, frame_usuarios_inferior))
+    botao_avancar = tk.Button(frame_botoes_avancar_recuar, text='>', fg=pattern.cor_branca_paleta, bg='#ff3b3b', 
+                                        font=pattern.fonte_cabecalho_11, command=lambda: Avancar_Exibicao_Usuarios(10, frame_usuarios_superior, frame_usuarios_inferior))
     botao_avancar.pack(fill='x', pady=5, expand=True)
 
     Limpar_Exibir_Botoes_Usuarios(frame_usuarios_superior, frame_usuarios_inferior)
@@ -86,12 +90,22 @@ def Limpar_Exibir_Botoes_Usuarios(frame_sup, frame_inf):
     for usuario in usuarios:
 
         if botoes_no_frame_superior < 5:
-            nivel_button = tk.Button(frame_sup, text=usuario['usuario'], height=2, command=lambda p_user = usuario['usuario']: Exibir_Alterar_Usuario(p_user))
+            nivel_button = tk.Button(   frame_sup, 
+                                        text=usuario['usuario'],
+                                        font=pattern.fonte_cabecalho_12,
+                                        fg=pattern.cor_fonte_padrao,
+                                        height=2, 
+                                        command=lambda p_user = usuario['usuario']: Exibir_Alterar_Usuario(p_user))
             nivel_button.grid(row=0, column=botoes_no_frame_superior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_superior += 1
 
         elif botoes_no_frame_inferior < 5:
-            nivel_button = tk.Button(frame_inf, text=usuario['usuario'], height=2, command=lambda p_user = usuario['id']: Exibir_Alterar_Usuario(p_user))
+            nivel_button = tk.Button(   frame_inf, 
+                                        text=usuario['usuario'],
+                                        font=pattern.fonte_cabecalho_12,
+                                        fg=pattern.cor_fonte_padrao,
+                                        height=2, 
+                                        command=lambda p_user = usuario['id']: Exibir_Alterar_Usuario(p_user))
             nivel_button.grid(row=0, column=botoes_no_frame_inferior, padx=10, pady=10, sticky='ew')
             botoes_no_frame_inferior += 1
 
@@ -103,7 +117,7 @@ def Exibir_Alterar_Usuario(user):
     
     janela_usuario = tk.Toplevel()
     janela_usuario.title("Alterar usuário")
-    janela_usuario.geometry("300x200")
+    janela_usuario.geometry("450x200")
     janela_usuario.resizable(False, False)
     janela_usuario.grab_set()
 
@@ -112,14 +126,31 @@ def Exibir_Alterar_Usuario(user):
     frame = tk.Frame(janela_usuario, padx=20, pady=20)
     frame.pack(expand=True, fill='both')
     
-    tk.Label(frame, text="Usuário:").grid(row=0, column=0, sticky='w', pady=(0, 5))
-    entrada_user = tk.Entry(frame, width=20)
+    tk.Label(   frame, 
+                text="Usuário: ", 
+                font=pattern.fonte_cabecalho_12, 
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, sticky='w', pady=(0, 5))
+
+    entrada_user = tk.Entry(    frame, 
+                                width=20, 
+                                font=pattern.fonte_texto, 
+                                fg=pattern.cor_fonte_padrao)
     entrada_user.insert(0, usuario['usuario'])
     entrada_user.config(state='readonly')
     entrada_user.grid(row=0, column=1, pady=(0, 5))
     
-    tk.Label(frame, text="Nova senha:").grid(row=1, column=0, sticky='w', pady=(0, 5))
-    entrada_senha = tk.Entry(frame, width=20, show='*')
+    tk.Label(   frame, 
+                text="Nova senha:",
+                font=pattern.fonte_cabecalho_12, 
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=1, column=0, sticky='w', pady=(0, 5))
+
+    entrada_senha = tk.Entry(   frame, 
+                                width=20, 
+                                show='*',
+                                font=pattern.fonte_texto, 
+                                fg=pattern.cor_fonte_padrao)
     entrada_senha.grid(row=1, column=1, pady=(0, 5))
     entrada_senha.focus()
 
@@ -142,27 +173,61 @@ def Exibir_Alterar_Usuario(user):
         else:
             messagebox.showerror("Erro ao atualizar usuário!", mensagem)
 
+    tk.Label(   frame, 
+                text="Confirmar nova senha:", 
+                font=pattern.fonte_cabecalho_12, 
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=2, column=0, sticky='w', pady=(0, 10))
 
-    tk.Label(frame, text="Confirmar nova senha:").grid(row=2, column=0, sticky='w', pady=(0, 10))
-    entrada_conf_senha = tk.Entry(frame, width=20, show='*')
+    entrada_conf_senha = tk.Entry(  frame, 
+                                    width=20, 
+                                    show='*', 
+                                    font=pattern.fonte_texto, 
+                                    fg=pattern.cor_fonte_padrao)
     entrada_conf_senha.grid(row=2, column=1, pady=(0, 10))
     entrada_conf_senha.bind('<Return>', lambda e: Executar_Atualizar_Usuario())
 
     papel_usuario = tk.StringVar(value=usuario['papel'])
 
-    radio_adm = tk.Radiobutton(frame, text="Administrador", variable=papel_usuario, value="admin")
+    radio_adm = tk.Radiobutton( frame, 
+                                text="Administrador",
+                                font=pattern.fonte_texto,
+                                fg=pattern.cor_fonte_padrao, 
+                                variable=papel_usuario, 
+                                value="admin")
     radio_adm.config(state='disabled')
     radio_adm.grid(row=3, column=0)
 
-    radio_user = tk.Radiobutton(frame, text="Player", variable=papel_usuario, value="user")
+    radio_user = tk.Radiobutton(frame, 
+                                text="Player", 
+                                font=pattern.fonte_texto,
+                                fg=pattern.cor_fonte_padrao, 
+                                variable=papel_usuario, 
+                                value="user")
     radio_user.config(state='disabled')
     radio_user.grid(row=3, column=1)
 
     frame_botoes = tk.Frame(frame)
     frame_botoes.grid(row=4, column=0, columnspan=2, pady=5)
     
-    tk.Button(frame_botoes, text="Salvar", command=Executar_Atualizar_Usuario, width=10).pack(side='left', padx=5)
-    tk.Button(frame_botoes, text="Cancelar", command=janela_usuario.destroy, width=10).pack(side='left', padx=5)
+    tk.Button(  frame_botoes, 
+                text="Salvar",
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao,
+                bg=pattern.cor_fria_paleta,
+                command=Executar_Atualizar_Usuario, 
+                width=10
+            ).pack(side='right', padx=5)
+
+    tk.Button(  frame_botoes, 
+                text="Cancelar",
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_clara,
+                bg=pattern.cor_escura_paleta,
+                command=janela_usuario.destroy, 
+                width=10
+            ).pack(side='left', padx=5)
+
     janela_usuario.mainloop()
 
 def Atualizar_Usuario(usuario, nova_senha):

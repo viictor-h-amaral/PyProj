@@ -4,11 +4,19 @@ from Sys.Login import Centralizar_Janela, Obter_Usuario_Atual
 import Sys.LevelRunner as LRunner
 import Sys.Crud as crud
 import Sys.LevelRunner as LRunner
+import Sys.WindowsPattern as pattern
 
 num_linhas = None
 num_colunas = None
 Matriz_Estrutural = []
 Botao_Selecionado = None
+
+def Limpar_Variaveis_Globais():
+    global num_linhas, num_colunas, Matriz_Estrutural, Botao_Selecionado
+    num_linhas = None
+    num_colunas = None
+    Matriz_Estrutural = []
+    Botao_Selecionado = None
 
 def Gerar_Pagina_Criacao_Nivel(raiz):
     Exibir_Janela_Dimensoes_Nivel(raiz)
@@ -32,13 +40,29 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
     frame_entradas = tk.Frame(janela)
     frame_entradas.pack(expand=True, fill='both', padx=10, pady=10)
 
-    tk.Label(frame_entradas, text="Número de linhas:").grid(row=0, column=0, sticky='w', padx=5, pady=5)
-    entrada_linhas = tk.Entry(frame_entradas, width=20)
+    tk.Label(   frame_entradas, 
+                text="Número de linhas:", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, sticky='w', padx=5, pady=5)
+
+    entrada_linhas = tk.Entry(  frame_entradas, 
+                                width=20, 
+                                font=pattern.fonte_texto,
+                                fg=pattern.cor_fonte_padrao)
     entrada_linhas.grid(row=0, column=1, padx=5, pady=5)
     entrada_linhas.focus()
 
-    tk.Label(frame_entradas, text="Número de colunas:").grid(row=1, column=0, sticky='w', padx=5, pady=5)
-    entrada_colunas = tk.Entry(frame_entradas, width=20)
+    tk.Label(   frame_entradas, 
+                text="Número de colunas:", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=1, column=0, sticky='w', padx=5, pady=5)
+
+    entrada_colunas = tk.Entry( frame_entradas, 
+                                width=20, 
+                                font=pattern.fonte_texto,
+                                fg=pattern.cor_fonte_padrao)
     entrada_colunas.grid(row=1, column=1, padx=5, pady=5)
 
     frame_botoes = tk.Frame(janela)
@@ -68,8 +92,24 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
         ao_fechar_janela()
         Exibir_Janela_Criacao_Nivel(raiz)
 
-    tk.Button(frame_botoes, text='Criar nível', command= lambda: Salvar_Dimensoes(), width=10).pack(side='right', padx=5)
-    tk.Button(frame_botoes, text='Cancelar', command= lambda: ao_fechar_janela(), width=10).pack(side='right', padx=5)
+    tk.Button(  frame_botoes, 
+                text='Criar nível', 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao,
+                bg=pattern.cor_fria_paleta,
+                command= lambda: Salvar_Dimensoes(), 
+                width=15
+            ).pack(side='right', padx=5)
+
+    tk.Button(  frame_botoes, 
+                text='Cancelar', 
+                font=pattern.fonte_cabecalho_12, 
+                fg=pattern.cor_fonte_clara,
+                bg=pattern.cor_escura_paleta,
+                command= lambda: ao_fechar_janela(), 
+                width=15
+            ).pack(side='right', padx=5)
+
     entrada_colunas.bind('<Return>', lambda e: Salvar_Dimensoes())
 
     Centralizar_Janela(janela)
@@ -98,11 +138,7 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     janela.focus_force()
 
     def ao_fechar_janela():
-        global num_linhas, num_colunas, Matriz_Estrutural
-
-        Matriz_Estrutural = []
-        num_linhas = None
-        num_colunas = None
+        Limpar_Variaveis_Globais()
         janela.destroy()
         raiz.focus_force()
         raiz.grab_set()
@@ -154,7 +190,11 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     for j in range(num_colunas):
         frame_matriz_estrutural.grid_columnconfigure(j, weight=0, minsize=tamanho_botao)
 
-    tk.Label(frame_esquerda, text="Início", font=("Arial", 14), fg='green').pack(side='bottom', pady=10)
+    tk.Label(   frame_esquerda, 
+                text="Início", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_fria_paleta
+            ).pack(side='bottom', pady=10)
 
     def Salvar_Nivel():
         global Matriz_Estrutural
@@ -165,10 +205,19 @@ def Exibir_Janela_Criacao_Nivel(raiz):
         else:
             messagebox.showerror("Opss", "O nível criado não é válido!")
 
-    tk.Button(frame_esquerda, text="Salvar nível", font=("Arial", 14), bg='green', fg='white',
-                            command=lambda: Salvar_Nivel()).pack(side='top', pady=10)
+    tk.Button(  frame_esquerda, 
+                text="Salvar nível", 
+                font=pattern.fonte_cabecalho_12, 
+                fg=pattern.cor_fonte_padrao,
+                bg=pattern.verde, 
+                command=lambda: Salvar_Nivel()
+            ).pack(side='top', pady=10)
 
-    tk.Label(frame_direita, text="Fim", font=("Arial", 14), fg='red').pack(side='top', pady=10, anchor='w')
+    tk.Label(   frame_direita, 
+                text="Fim", 
+                font=pattern.fonte_cabecalho_22, 
+                fg=pattern.cor_quente_paleta
+            ).pack(side='top', pady=10, anchor='w')
 
     janela.botoes_pecas = {}
     janela.imagens_pecas = []
@@ -205,7 +254,7 @@ def Clique_Botao_Matriz_Estrutural(raiz, linha, coluna):
         Botao_Selecionado.config(bg='SystemButtonFace')
 
     Botao_Selecionado = raiz.botoes_pecas[(linha, coluna)]
-    Botao_Selecionado.config(bg='red')
+    Botao_Selecionado.config(bg=pattern.cor_quente_paleta)
     Botao_Selecionado.linha = linha
     Botao_Selecionado.coluna = coluna
 
@@ -231,9 +280,9 @@ def Gera_Secao_Todas_As_Pecas(janela, tamanho_botao):
     for j in range(num_colunas_pecas):
         frame_pecas.grid_columnconfigure(j, weight=0, minsize=tamanho_botao)
 
-    pecas = crud.Buscar_Pecas()
     janela.matriz_pecas = []
     
+    '''pecas = crud.Buscar_Pecas()
     indice_peca_atual = 0
     for linha in range(num_linhas_pecas):
         linha_pecas = []
@@ -243,8 +292,11 @@ def Gera_Secao_Todas_As_Pecas(janela, tamanho_botao):
                 indice_peca_atual += 1
             else:
                 linha_pecas.append(0) 
-        janela.matriz_pecas.append(linha_pecas)
+        janela.matriz_pecas.append(linha_pecas)'''
     
+    janela.matriz_pecas =   [[0, 41, 11, 12, 13, 14, 21, 22], 
+                             [23, 24, 25, 26, 31, 32, 33, 34]]
+
     janela.botoes_pecas_padrao = {}
     
     tamanho_imagem = tamanho_botao - 2
@@ -305,38 +357,94 @@ def Exibir_Janela_Salvar_Nivel(raiz):
     janela_confirmacao.title("Salvar nível")
     janela_confirmacao.resizable(False, False)
 
-    tk.Label(janela_confirmacao, text="Nome do nível:").grid(row=0, column=0, sticky='w', padx=5, pady=5)
-    nome_nivel = tk.Entry(janela_confirmacao, width=20)
+    frame_nome_nivel = tk.Frame(janela_confirmacao)
+    frame_nome_nivel.grid(row=0, column=0, sticky='w', padx=5, pady=5)
+
+    tk.Label(frame_nome_nivel, 
+                text="Nome do nível:", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, sticky='w', padx=5, pady=5)
+
+    nome_nivel = tk.Entry(  frame_nome_nivel, 
+                            width=20, 
+                            font=pattern.fonte_texto,
+                            fg=pattern.cor_fonte_padrao)
     nome_nivel.grid(row=0, column=1, padx=5, pady=5)
     nome_nivel.focus()
 
-    tk.Label(janela_confirmacao, text="Nível de dificuldade:").grid(row=1, column=0, sticky='w', padx=5, pady=5)
+    frame_nivel_dificuldade = tk.Frame(janela_confirmacao)
+    frame_nivel_dificuldade.grid(row=1, column=0, sticky='w', padx=5, pady=5)
+
+    tk.Label(   frame_nivel_dificuldade, 
+                text="Nível de dificuldade:", 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao
+            ).grid(row=0, column=0, columnspan=3, sticky='w', padx=5, pady=5)
+
     dificuldade_novo_nivel = tk.StringVar(value="facil")
-    radio_facil = tk.Radiobutton(janela_confirmacao, text="Fácil", variable=dificuldade_novo_nivel, value="facil")
-    radio_facil.grid(row=2, column=0)
+    radio_facil = tk.Radiobutton(frame_nivel_dificuldade, 
+                                    text="Fácil", 
+                                    font=pattern.fonte_texto, 
+                                    fg=pattern.cor_fonte_padrao,
+                                    variable=dificuldade_novo_nivel, 
+                                    value="facil")
+    radio_facil.grid(row=1, column=0, sticky='w')
 
-    radio_medio = tk.Radiobutton(janela_confirmacao, text="Médio", variable=dificuldade_novo_nivel, value="medio")
-    radio_medio.grid(row=2, column=1)
+    radio_medio = tk.Radiobutton(frame_nivel_dificuldade, 
+                                text="Médio", 
+                                font=pattern.fonte_texto, 
+                                fg=pattern.cor_fonte_padrao,
+                                variable=dificuldade_novo_nivel, 
+                                value="medio")
+    radio_medio.grid(row=1, column=1, sticky='w')
 
-    radio_dificil = tk.Radiobutton(janela_confirmacao, text="Difícil", variable=dificuldade_novo_nivel, value="dificil")
-    radio_dificil.grid(row=2, column=2)
+    radio_dificil = tk.Radiobutton(frame_nivel_dificuldade, 
+                                    text="Difícil", 
+                                    font=pattern.fonte_texto, 
+                                    fg=pattern.cor_fonte_padrao, 
+                                    variable=dificuldade_novo_nivel, 
+                                    value="dificil")
+    radio_dificil.grid(row=1, column=2, sticky='w')
 
+    frame_botoes = tk.Frame(janela_confirmacao)
+    frame_botoes.grid(row=2, column=0, padx=5, pady=5)
 
     def Persistir_Nivel():
+        global Matriz_Estrutural
         nome_nivel_string = nome_nivel.get()
         dificuldade = dificuldade_novo_nivel.get()
 
         if not nome_nivel_string or not dificuldade:
             messagebox.showerror("Opss", "Você deve informar o nome e a dificuldade do nível para prosseguir!")
             return
+        elif len(nome_nivel_string) > 100:
+            messagebox.showerror("Opss", "Máximo de caracteres para o nome do nível é 100!")
+            return
 
         crud.Salvar_Nivel(nome_nivel_string, dificuldade, Matriz_Estrutural,  Obter_Usuario_Atual())
         messagebox.showinfo("Operação concluída", "Nível salvo com sucesso!")
         ao_fechar_janela()
         raiz.destroy()
+        Limpar_Variaveis_Globais()
 
-    tk.Button(janela_confirmacao, text='Cancelar', command=lambda: ao_fechar_janela()).grid(row=3, column=0, padx=5, pady=5)
-    tk.Button(janela_confirmacao, text='Salvar', command=lambda: Persistir_Nivel()).grid(row=3, column=1, padx=5, pady=5)
+    tk.Button(frame_botoes, 
+                text='Cancelar', 
+                font=pattern.fonte_cabecalho_11,
+                fg=pattern.cor_fonte_clara,
+                bg=pattern.cor_escura_paleta,
+                width=15,
+                command=lambda: ao_fechar_janela()
+            ).grid(row=0, column=0, padx=5, pady=5)
+
+    tk.Button(frame_botoes, 
+                text='Salvar', 
+                font=pattern.fonte_cabecalho_12,
+                fg=pattern.cor_fonte_padrao, 
+                bg=pattern.cor_fria_paleta, 
+                width=15,
+                command=lambda: Persistir_Nivel()
+            ).grid(row=0, column=1, padx=5, pady=5)
 
     Centralizar_Janela(janela_confirmacao)
     janela_confirmacao.mainloop()
