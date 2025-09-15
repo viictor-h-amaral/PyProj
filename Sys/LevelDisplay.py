@@ -1,3 +1,10 @@
+"""
+Módulo de exibição e gerenciamento de níveis.
+
+Responsável por exibir níveis concluídos e incompletos, navegação entre níveis
+e interface de seleção de níveis disponíveis.
+"""
+
 from pathlib import Path
 import Sys.Crud as crud
 import Sys.LevelRunner as LRunner
@@ -7,16 +14,23 @@ from PIL import Image, ImageTk
 from Sys.Login import Obter_Usuario_Atual, Atualizar_Usuario_Atual, Centralizar_Janela
 import Sys.WindowsPattern as pattern
 
+# Variáveis globais para estado dos níveis
 Nivel = None
 Estrutura = None
 Matriz_Estrutural = None
 controle_niveis_exibidos = [0, 10]
-
 Usuario_Atual = None
-
 Nivel_Atual_Concluido = False
 
+
 def Exibir_Nivel(nivel_id, raiz):
+    """
+    Exibe um nível baseado no seu estado (concluído ou incompleto).
+    
+    Args:
+        nivel_id: ID do nível a ser exibido
+        raiz: Janela pai para exibição
+    """
     global Usuario_Atual, Nivel
     
     Nivel = crud.Buscar_Nivel(nivel_id)
@@ -26,7 +40,15 @@ def Exibir_Nivel(nivel_id, raiz):
     else: 
         Exibir_Nivel_Incompleto(nivel_id, raiz)
 
+
 def Exibir_Nivel_Concluido(nivel_id, pagina):
+    """
+    Exibe interface para nível já concluído (somente visualização).
+    
+    Args:
+        nivel_id: ID do nível concluído
+        pagina: Página pai para exibição
+    """
     global Estrutura, Matriz_Estrutural, Nivel_Atual_Concluido
 
     Estrutura = crud.Buscar_Estrutura_Do_Nivel(nivel_id)
@@ -41,6 +63,7 @@ def Exibir_Nivel_Concluido(nivel_id, pagina):
     raiz.focus_force()
 
     def ao_fechar_nivel_concluido():
+        """Callback para fechar o nível concluído."""
         raiz.destroy()
         pagina.focus_force()
         pagina.grab_set()
@@ -79,7 +102,7 @@ def Exibir_Nivel_Concluido(nivel_id, pagina):
                 fg=pattern.cor_fria_paleta
             ).pack(side='bottom', pady=10)
 
-    tk.Label(   frame_direita, 
+    tk.Label(frame_direita, 
                 text="Fim", 
                 font=pattern.fonte_cabecalho_22, 
                 fg=pattern.cor_quente_paleta
@@ -92,13 +115,14 @@ def Exibir_Nivel_Concluido(nivel_id, pagina):
     botoes = {}
     for indice_linha in range(num_linhas):
         for indice_coluna in range(num_colunas):
-            botao = tk.Button(  janela_nivel, 
+            botao = tk.Button(janela_nivel, 
                                 state='disabled')
             botao.grid(row=indice_linha, column=indice_coluna, sticky='nsew', padx=1, pady=1)
             botoes[(indice_linha, indice_coluna)] = botao
     
     # Função para atualizar imagens após renderização
     def atualizar_imagens_concluido():
+        """Atualiza as imagens das peças após a renderização da janela."""
         if botoes:
             primeiro_botao = list(botoes.values())[0]
             primeiro_botao.update_idletasks()
@@ -118,7 +142,15 @@ def Exibir_Nivel_Concluido(nivel_id, pagina):
 
     raiz.mainloop()
 
+
 def Exibir_Nivel_Incompleto(nivel_id, pagina):
+    """
+    Exibe interface para nível incompleto (interativo).
+    
+    Args:
+        nivel_id: ID do nível a ser exibido
+        pagina: Página pai para exibição
+    """
     global Estrutura, Matriz_Estrutural, Nivel_Atual_Concluido
 
     Estrutura = crud.Buscar_Estrutura_Do_Nivel(nivel_id)
@@ -133,6 +165,7 @@ def Exibir_Nivel_Incompleto(nivel_id, pagina):
     raiz.focus_force()
 
     def ao_fechar_nivel_incompleto():
+        """Callback para fechar o nível incompleto."""
         raiz.destroy()
         pagina.focus_force()
         pagina.grab_set()
@@ -170,13 +203,13 @@ def Exibir_Nivel_Incompleto(nivel_id, pagina):
         frame_nivel.grid_columnconfigure(j, weight=1, uniform="peca_col")
     
     # Labels de início e fim
-    tk.Label(   frame_esquerda, 
+    tk.Label(frame_esquerda, 
                 text="Início", 
                 font=pattern.fonte_cabecalho_22, 
                 fg=pattern.cor_fria_paleta
             ).pack(side='bottom', pady=10)
 
-    tk.Label(   frame_direita, 
+    tk.Label(frame_direita, 
                 text="Fim", 
                 font=pattern.fonte_cabecalho_22, 
                 fg=pattern.cor_quente_paleta
@@ -197,6 +230,7 @@ def Exibir_Nivel_Incompleto(nivel_id, pagina):
     
     # Função para atualizar as imagens após a janela ser renderizada
     def atualizar_imagens():
+        """Atualiza as imagens das peças após a renderização da janela."""
         # Obtém o tamanho real dos botões após o grid ser calculado
         if janela_nivel.botoes_pecas:
             primeiro_botao = list(janela_nivel.botoes_pecas.values())[0]
@@ -228,10 +262,24 @@ def Exibir_Nivel_Incompleto(nivel_id, pagina):
 
 
 def Rotina_Clique_Peca(coordenada, janela_nivel):
+    """
+    Rotina executada ao clicar em uma peça.
+    
+    Args:
+        coordenada: Coordenadas (linha, coluna) da peça clicada
+        janela_nivel: Janela do nível atual
+    """
     LRunner.Atualizar_Peca(coordenada, janela_nivel)
     Rotina_Valida_Nivel(janela_nivel)
     
+
 def Rotina_Valida_Nivel(janela):
+    """
+    Valida se o nível foi concluído corretamente.
+    
+    Args:
+        janela: Janela do nível atual
+    """
     global Nivel_Atual_Concluido
 
     nivel_concluido = LRunner.Rotina_Verifica_Nivel_Valido(janela.pecas_ids)
@@ -240,9 +288,17 @@ def Rotina_Valida_Nivel(janela):
             Rotina_Nivel_Concluido(janela)
             messagebox.showinfo("Sucesso", "Nível concluído!")
         Nivel_Atual_Concluido = True
-    else: Nivel_Atual_Concluido = False
+    else: 
+        Nivel_Atual_Concluido = False
+
 
 def Rotina_Nivel_Concluido(janela):
+    """
+    Executa rotinas quando um nível é concluído.
+    
+    Args:
+        janela: Janela do nível concluído
+    """
     global Nivel
     global Usuario_Atual
 
@@ -251,10 +307,15 @@ def Rotina_Nivel_Concluido(janela):
 
     crud.Salvar_Nivel_Concluido(Usuario_Atual, Nivel)
     Usuario_Atual = Atualizar_Usuario_Atual()  
-    x = 2
+
 
 def Gerar_Pagina_Niveis(raiz):
-
+    """
+    Gera a página principal de seleção de níveis.
+    
+    Args:
+        raiz: Janela principal da aplicação
+    """
     global Usuario_Atual
     Usuario_Atual = Obter_Usuario_Atual() 
 
@@ -264,6 +325,7 @@ def Gerar_Pagina_Niveis(raiz):
     pagina.focus_force()
 
     def ao_fechar_pagina_niveis():
+        """Callback para fechar a página de níveis."""
         pagina.destroy()
         raiz.focus_force()
         raiz.grab_release()  # Libera o grab da janela principal
@@ -304,7 +366,16 @@ def Gerar_Pagina_Niveis(raiz):
 
     pagina.mainloop()
 
+
 def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, janela_niveis):
+    """
+    Limpa e exibe os botões dos níveis disponíveis.
+    
+    Args:
+        frame_sup: Frame superior para botões
+        frame_inf: Frame inferior para botões
+        janela_niveis: Janela de níveis
+    """
     for widget in frame_sup.winfo_children():
         widget.destroy()
 
@@ -330,7 +401,7 @@ def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, janela_niveis):
             case 'DIFICIL': bg = pattern.vermelho
 
         if botoes_no_frame_superior < 5:
-            nivel_button = tk.Button(   frame_sup, 
+            nivel_button = tk.Button(frame_sup, 
                                         text=nivel['nome'], 
                                         height=2, 
                                         bg = bg, 
@@ -341,7 +412,7 @@ def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, janela_niveis):
             botoes_no_frame_superior += 1
 
         elif botoes_no_frame_inferior < 5:
-            nivel_button = tk.Button(   frame_inf, 
+            nivel_button = tk.Button(frame_inf, 
                                         text=nivel['nome'], 
                                         height=2, 
                                         bg = bg, 
@@ -354,7 +425,16 @@ def Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, janela_niveis):
         else: 
             break
 
+
 def Recuar_Exibicao_Niveis(frame_sup, frame_inf, raiz):
+    """
+    Recua a exibição dos níveis (página anterior).
+    
+    Args:
+        frame_sup: Frame superior
+        frame_inf: Frame inferior
+        raiz: Janela principal
+    """
     global controle_niveis_exibidos
     if (controle_niveis_exibidos[0] - 10 < 0):
         return
@@ -363,7 +443,16 @@ def Recuar_Exibicao_Niveis(frame_sup, frame_inf, raiz):
     controle_niveis_exibidos[1] -= 10
     Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, raiz)
 
+
 def Avancar_Exibicao_Niveis(frame_sup, frame_inf, raiz):
+    """
+    Avança a exibição dos níveis (próxima página).
+    
+    Args:
+        frame_sup: Frame superior
+        frame_inf: Frame inferior
+        raiz: Janela principal
+    """
     global controle_niveis_exibidos
 
     quantidade_niveis_existente = len(crud.Buscar_Niveis())
@@ -376,10 +465,18 @@ def Avancar_Exibicao_Niveis(frame_sup, frame_inf, raiz):
     controle_niveis_exibidos[1] += 10
     Limpar_Exibir_Botoes_Niveis(frame_sup, frame_inf, raiz)
 
+
 def Calcular_Tamanho_Janela(matriz):
     """
-    Calcula o tamanho ideal da janela baseado na matriz
-    Mantém peças maiores para matrizes pequenas e ajusta para matrizes grandes
+    Calcula o tamanho ideal da janela baseado na matriz.
+    
+    Mantém peças maiores para matrizes pequenas e ajusta para matrizes grandes.
+    
+    Args:
+        matriz: Matriz representando o nível
+        
+    Returns:
+        tuple: (largura_total, altura_total, tamanho_celula)
     """
     num_linhas = len(matriz)
     num_colunas = len(matriz[0])
@@ -402,9 +499,17 @@ def Calcular_Tamanho_Janela(matriz):
     
     return largura_total, altura_total, tamanho_celula
 
+
 def Buscar_Imagem_Peca_Redimensionada(peca_id, tamanho):
     """
-    Versão modificada da Buscar_Imagem_Peca que aceita tamanho personalizado
+    Busca imagem de peça redimensionada para tamanho personalizado.
+    
+    Args:
+        peca_id: ID da peça
+        tamanho: Tamanho desejado para a imagem
+        
+    Returns:
+        ImageTk.PhotoImage: Imagem redimensionada
     """
     arquivo_img = crud.Buscar_Peca_Arquivo(peca_id)
     end_img = LRunner.Endereco_Imagem(arquivo_img)

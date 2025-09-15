@@ -1,33 +1,52 @@
+"""
+Módulo de criação de níveis.
+
+Responsável pela interface e lógica para criação de novos níveis do jogo,
+incluindo definição de dimensões, posicionamento de peças e salvamento.
+"""
+
 import tkinter as tk
 from tkinter import messagebox
 from Sys.Login import Centralizar_Janela, Obter_Usuario_Atual
 import Sys.LevelRunner as LRunner
 import Sys.Crud as crud
-import Sys.LevelRunner as LRunner
 import Sys.WindowsPattern as pattern
 
+# Variáveis globais para estado da criação
 num_linhas = None
 num_colunas = None
 Matriz_Estrutural = []
 Botao_Selecionado = None
 
+
 def Limpar_Variaveis_Globais():
+    """Limpa todas as variáveis globais do módulo."""
     global num_linhas, num_colunas, Matriz_Estrutural, Botao_Selecionado
     num_linhas = None
     num_colunas = None
     Matriz_Estrutural = []
     Botao_Selecionado = None
 
+
 def Gerar_Pagina_Criacao_Nivel(raiz):
+    """Inicia o processo de criação de nível exibindo a janela de dimensões."""
     Exibir_Janela_Dimensoes_Nivel(raiz)
 
+
 def Exibir_Janela_Dimensoes_Nivel(raiz):
+    """
+    Exibe janela para definição das dimensões do nível.
+    
+    Args:
+        raiz: Janela pai para a janela modal
+    """
     janela = tk.Toplevel(raiz)
     janela.transient(raiz)
     janela.grab_set()
     janela.focus_force()
 
     def ao_fechar_janela():
+        """Callback para fechar a janela e retornar o foco."""
         janela.destroy()
         raiz.focus_force()
         raiz.grab_set()
@@ -40,26 +59,26 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
     frame_entradas = tk.Frame(janela)
     frame_entradas.pack(expand=True, fill='both', padx=10, pady=10)
 
-    tk.Label(   frame_entradas, 
+    tk.Label(frame_entradas, 
                 text="Número de linhas:", 
                 font=pattern.fonte_cabecalho_12,
                 fg=pattern.cor_fonte_padrao
             ).grid(row=0, column=0, sticky='w', padx=5, pady=5)
 
-    entrada_linhas = tk.Entry(  frame_entradas, 
+    entrada_linhas = tk.Entry(frame_entradas, 
                                 width=20, 
                                 font=pattern.fonte_texto,
                                 fg=pattern.cor_fonte_padrao)
     entrada_linhas.grid(row=0, column=1, padx=5, pady=5)
     entrada_linhas.focus()
 
-    tk.Label(   frame_entradas, 
+    tk.Label(frame_entradas, 
                 text="Número de colunas:", 
                 font=pattern.fonte_cabecalho_12,
                 fg=pattern.cor_fonte_padrao
             ).grid(row=1, column=0, sticky='w', padx=5, pady=5)
 
-    entrada_colunas = tk.Entry( frame_entradas, 
+    entrada_colunas = tk.Entry(frame_entradas, 
                                 width=20, 
                                 font=pattern.fonte_texto,
                                 fg=pattern.cor_fonte_padrao)
@@ -69,6 +88,7 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
     frame_botoes.pack(expand=True, fill='both', padx=10, pady=10)
 
     def Salvar_Dimensoes():
+        """Valida e salva as dimensões informadas pelo usuário."""
         linhas = entrada_linhas.get()
         colunas = entrada_colunas.get()
 
@@ -92,21 +112,21 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
         ao_fechar_janela()
         Exibir_Janela_Criacao_Nivel(raiz)
 
-    tk.Button(  frame_botoes, 
+    tk.Button(frame_botoes, 
                 text='Criar nível', 
                 font=pattern.fonte_cabecalho_12,
                 fg=pattern.cor_fonte_padrao,
                 bg=pattern.cor_fria_paleta,
-                command= lambda: Salvar_Dimensoes(), 
+                command=lambda: Salvar_Dimensoes(), 
                 width=15
             ).pack(side='right', padx=5)
 
-    tk.Button(  frame_botoes, 
+    tk.Button(frame_botoes, 
                 text='Cancelar', 
                 font=pattern.fonte_cabecalho_12, 
                 fg=pattern.cor_fonte_clara,
                 bg=pattern.cor_escura_paleta,
-                command= lambda: ao_fechar_janela(), 
+                command=lambda: ao_fechar_janela(), 
                 width=15
             ).pack(side='right', padx=5)
 
@@ -114,7 +134,9 @@ def Exibir_Janela_Dimensoes_Nivel(raiz):
 
     Centralizar_Janela(janela)
 
+
 def Definir_Matriz_Estrutural():
+    """Inicializa a matriz estrutural com peças inicial e final padrão."""
     global num_linhas, num_colunas, Matriz_Estrutural
 
     for indice_linha in range(num_linhas):
@@ -129,7 +151,14 @@ def Definir_Matriz_Estrutural():
     coordenada_peca_final = LRunner.Coordenada_Peca_Final(Matriz_Estrutural)
     Matriz_Estrutural[coordenada_peca_final[0]][coordenada_peca_final[1]] = 14
 
+
 def Exibir_Janela_Criacao_Nivel(raiz):
+    """
+    Exibe a janela principal de criação de nível com a matriz de peças.
+    
+    Args:
+        raiz: Janela pai para a janela de criação
+    """
     global num_linhas, num_colunas, Matriz_Estrutural
 
     janela = tk.Toplevel(raiz)
@@ -138,6 +167,7 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     janela.focus_force()
 
     def ao_fechar_janela():
+        """Callback para fechar a janela e limpar variáveis."""
         Limpar_Variaveis_Globais()
         janela.destroy()
         raiz.focus_force()
@@ -150,8 +180,8 @@ def Exibir_Janela_Criacao_Nivel(raiz):
 
     tamanho_botao = Calcular_Tamanho_Botao(num_linhas, num_colunas)
     
-    largura_frame_nivel = (num_colunas * tamanho_botao) + (2 * num_colunas * 1) + (2 * 5) #TAMANHO BOTOES + MARGEM 1PX BOTOES + MARGEM FRAMES
-    altura_frame_nivel = (num_linhas * tamanho_botao) + (2 * num_linhas * 1) + (2 * 5) #TAMANHO BOTOES + MARGEM 1PX + MARGEM FRAMES
+    largura_frame_nivel = (num_colunas * tamanho_botao) + (2 * num_colunas * 1) + (2 * 5)
+    altura_frame_nivel = (num_linhas * tamanho_botao) + (2 * num_linhas * 1) + (2 * 5)
     
     largura_frame_pecas = (8 * tamanho_botao) + (2 * 8) + (2 * 10)
     altura_frame_pecas = (2 * tamanho_botao) + (2 * 2) + (2 * 10)
@@ -190,13 +220,14 @@ def Exibir_Janela_Criacao_Nivel(raiz):
     for j in range(num_colunas):
         frame_matriz_estrutural.grid_columnconfigure(j, weight=0, minsize=tamanho_botao)
 
-    tk.Label(   frame_esquerda, 
+    tk.Label(frame_esquerda, 
                 text="Início", 
                 font=pattern.fonte_cabecalho_22, 
                 fg=pattern.cor_fria_paleta
             ).pack(side='bottom', pady=10)
 
     def Salvar_Nivel():
+        """Valida e persiste o nível criado."""
         global Matriz_Estrutural
         nivel_valido = LRunner.Rotina_Verifica_Nivel_Valido(Matriz_Estrutural)
 
@@ -205,7 +236,7 @@ def Exibir_Janela_Criacao_Nivel(raiz):
         else:
             messagebox.showerror("Opss", "O nível criado não é válido!")
 
-    tk.Button(  frame_esquerda, 
+    tk.Button(frame_esquerda, 
                 text="Salvar nível", 
                 font=pattern.fonte_cabecalho_12, 
                 fg=pattern.cor_fonte_padrao,
@@ -213,7 +244,7 @@ def Exibir_Janela_Criacao_Nivel(raiz):
                 command=lambda: Salvar_Nivel()
             ).pack(side='top', pady=10)
 
-    tk.Label(   frame_direita, 
+    tk.Label(frame_direita, 
                 text="Fim", 
                 font=pattern.fonte_cabecalho_22, 
                 fg=pattern.cor_quente_paleta
@@ -243,6 +274,14 @@ def Exibir_Janela_Criacao_Nivel(raiz):
 
 
 def Clique_Botao_Matriz_Estrutural(raiz, linha, coluna):
+    """
+    Manipula o clique em um botão da matriz estrutural.
+    
+    Args:
+        raiz: Janela principal
+        linha: Linha do botão clicado
+        coluna: Coluna do botão clicado
+    """
     global Botao_Selecionado
 
     if (Botao_Selecionado == raiz.botoes_pecas[(linha, coluna)]):
@@ -258,8 +297,18 @@ def Clique_Botao_Matriz_Estrutural(raiz, linha, coluna):
     Botao_Selecionado.linha = linha
     Botao_Selecionado.coluna = coluna
 
+
 def Calcular_Tamanho_Botao(num_linhas, num_colunas):
-    """Calcula o tamanho fixo dos botões baseado no tamanho da matriz"""
+    """
+    Calcula o tamanho fixo dos botões baseado no tamanho da matriz.
+    
+    Args:
+        num_linhas: Número de linhas da matriz
+        num_colunas: Número de colunas da matriz
+        
+    Returns:
+        int: Tamanho do botão em pixels
+    """
     if num_linhas <= 3 and num_colunas <= 3:
         return 120 
     elif num_linhas <= 5 and num_colunas <= 5:
@@ -269,6 +318,13 @@ def Calcular_Tamanho_Botao(num_linhas, num_colunas):
 
 
 def Gera_Secao_Todas_As_Pecas(janela, tamanho_botao):
+    """
+    Gera a seção com todas as peças disponíveis para seleção.
+    
+    Args:
+        janela: Janela principal
+        tamanho_botao: Tamanho dos botões das peças
+    """
     frame_pecas = tk.Frame(janela)
     frame_pecas.grid(row=1, column=0, sticky='nsew', padx=10, pady=10)
     
@@ -281,18 +337,6 @@ def Gera_Secao_Todas_As_Pecas(janela, tamanho_botao):
         frame_pecas.grid_columnconfigure(j, weight=0, minsize=tamanho_botao)
 
     janela.matriz_pecas = []
-    
-    '''pecas = crud.Buscar_Pecas()
-    indice_peca_atual = 0
-    for linha in range(num_linhas_pecas):
-        linha_pecas = []
-        for coluna in range(num_colunas_pecas):
-            if indice_peca_atual < len(pecas):
-                linha_pecas.append(pecas[indice_peca_atual]['id'])
-                indice_peca_atual += 1
-            else:
-                linha_pecas.append(0) 
-        janela.matriz_pecas.append(linha_pecas)'''
     
     janela.matriz_pecas =   [[0, 41, 11, 12, 13, 14, 21, 22], 
                              [23, 24, 25, 26, 31, 32, 33, 34]]
@@ -316,7 +360,16 @@ def Gera_Secao_Todas_As_Pecas(janela, tamanho_botao):
             botao.grid(row=indice_linha, column=indice_coluna, sticky='nsew', padx=1, pady=1)
             janela.botoes_pecas_padrao[(indice_linha, indice_coluna)] = botao
 
+
 def Clique_Botao_Matriz_Pecas(raiz, linha, coluna):
+    """
+    Manipula o clique em uma peça da matriz de peças disponíveis.
+    
+    Args:
+        raiz: Janela principal
+        linha: Linha da peça clicada
+        coluna: Coluna da peça clicada
+    """
     global Matriz_Estrutural, Botao_Selecionado
     if Botao_Selecionado is None: 
         return
@@ -341,13 +394,21 @@ def Clique_Botao_Matriz_Pecas(raiz, linha, coluna):
     Botao_Selecionado.image = nova_imagem
     Botao_Selecionado = None
 
+
 def Exibir_Janela_Salvar_Nivel(raiz):
+    """
+    Exibe janela para salvar o nível criado com nome e dificuldade.
+    
+    Args:
+        raiz: Janela pai para a janela modal
+    """
     janela_confirmacao = tk.Toplevel(raiz)
     janela_confirmacao.transient(raiz)
     janela_confirmacao.grab_set()
     janela_confirmacao.focus_force()
 
     def ao_fechar_janela():
+        """Callback para fechar a janela de confirmação."""
         janela_confirmacao.destroy()
         raiz.focus_force()
         raiz.grab_set()
@@ -366,7 +427,7 @@ def Exibir_Janela_Salvar_Nivel(raiz):
                 fg=pattern.cor_fonte_padrao
             ).grid(row=0, column=0, sticky='w', padx=5, pady=5)
 
-    nome_nivel = tk.Entry(  frame_nome_nivel, 
+    nome_nivel = tk.Entry(frame_nome_nivel, 
                             width=20, 
                             font=pattern.fonte_texto,
                             fg=pattern.cor_fonte_padrao)
@@ -376,7 +437,7 @@ def Exibir_Janela_Salvar_Nivel(raiz):
     frame_nivel_dificuldade = tk.Frame(janela_confirmacao)
     frame_nivel_dificuldade.grid(row=1, column=0, sticky='w', padx=5, pady=5)
 
-    tk.Label(   frame_nivel_dificuldade, 
+    tk.Label(frame_nivel_dificuldade, 
                 text="Nível de dificuldade:", 
                 font=pattern.fonte_cabecalho_12,
                 fg=pattern.cor_fonte_padrao
@@ -411,6 +472,7 @@ def Exibir_Janela_Salvar_Nivel(raiz):
     frame_botoes.grid(row=2, column=0, padx=5, pady=5)
 
     def Persistir_Nivel():
+        """Persiste o nível no banco de dados."""
         global Matriz_Estrutural
         nome_nivel_string = nome_nivel.get()
         dificuldade = dificuldade_novo_nivel.get()
