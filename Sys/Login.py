@@ -402,6 +402,7 @@ def Mostrar_Janela_Login(raiz):
 
 def Obter_Usuario_Atual():
     """Retorna o usuário atualmente logado."""
+    usuario_atual = Atualizar_Usuario_Atual()
     return usuario_atual
 
 

@@ -11,7 +11,7 @@ import Sys.LevelRunner as LRunner
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
-from Sys.Login import Obter_Usuario_Atual, Atualizar_Usuario_Atual, Centralizar_Janela
+from Sys.Login import Obter_Usuario_Atual, Centralizar_Janela
 import Sys.WindowsPattern as pattern
 
 # Variáveis globais para estado dos níveis
@@ -306,7 +306,7 @@ def Rotina_Nivel_Concluido(janela):
         widget.configure(state='disabled')
 
     crud.Salvar_Nivel_Concluido(Usuario_Atual, Nivel)
-    Usuario_Atual = Atualizar_Usuario_Atual()  
+    Usuario_Atual = Obter_Usuario_Atual()  
 
 
 def Gerar_Pagina_Niveis(raiz):

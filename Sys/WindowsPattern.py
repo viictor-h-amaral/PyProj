@@ -41,7 +41,7 @@ def Alterar_Paleta(numero_paleta):
 
             cor_fonte_niveis = '#030303'
 
-            verde = '#00ffbb'
+            verde = "#5bc0b8"
             amarelo = '#ffd000'
             vermelho = '#ff0055'
 
@@ -66,7 +66,7 @@ def Alterar_Paleta(numero_paleta):
 
             cor_fonte_niveis = '#030303'
 
-            verde = '#a3ffa8'
+            verde = '#25857d'
             amarelo = '#fcffa3'
             vermelho = '#ff8787'
 
