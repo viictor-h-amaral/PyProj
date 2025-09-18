@@ -12,6 +12,7 @@ import Sys.MyLevelsDisplay as MLDisplay
 import Sys.UsersDisplay as UDisplay
 import Sys.LevelCreator as LCreator
 import Sys.WindowsPattern as pattern
+import Sys.Conquistas as conquistas
 
 
 def principal():
@@ -160,7 +161,8 @@ def configurar_interface_usuario(frame, pagina):
                 width=30, height=2,
                 font=pattern.fonte_cabecalho_11,
                 fg=pattern.cor_fonte_clara,
-                bg=pattern.cor_escura_paleta, 
+                bg=pattern.cor_escura_paleta,
+                command=lambda: conquistas.Gerar_Pagina_Conquistas(pagina)
             ).pack(pady=5)
 
     tk.Button(frame, 

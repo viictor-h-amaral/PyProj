@@ -178,3 +178,30 @@ def Excluir_Estrutura(estrutura_id):
     estruturas.remove(estrutura)
     with open(Obter_Caminho_Arquivo('Estruturas.json'), 'w', encoding='utf-8') as f:
         json.dump(estruturas, f, indent=4, ensure_ascii=False)
+
+def Retornar_Conquistas_Usuario(usuario):
+    conquistas = Buscar_Conquistas()
+    conquistas_usuario = []
+
+    niveis_usuario = []
+    for nivel_id in usuario['niveis_concluidos']:
+        niveis_usuario.append(Buscar_Nivel(nivel_id))
+
+    for conquista in conquistas:
+        contador_niveis = 0
+        for nivel in niveis_usuario:
+            if nivel['dificuldade'] in conquista['dificuldade_dos_niveis']:
+                contador_niveis += 1
+
+        if contador_niveis < conquista['niveis_para_conquista']:
+            continue
+
+        conquistas_usuario.append(conquista)
+
+    return conquistas_usuario
+
+def Buscar_Conquistas():
+    with open(Obter_Caminho_Arquivo('Conquistas.json'), 'r', encoding='utf-8') as arquivo_json:
+        dados = json.load(arquivo_json)
+
+    return dados

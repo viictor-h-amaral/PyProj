@@ -1,0 +1,38 @@
+[
+    {
+        "id":1,
+        "descricao": "Novato 👨‍💻",
+        "legenda":"Complete seu primeiro nível",
+        "niveis_para_conquista": 1,
+        "dificuldade_dos_niveis": ["facil", "medio", "dificil"]
+    },
+    {
+        "id":2,
+        "descricao": "Júnior 🔥",
+        "legenda":"Complete cinco níveis",
+        "niveis_para_conquista": 5,
+        "dificuldade_dos_niveis": ["facil", "medio", "dificil"]
+    },
+    {
+        "id":3,
+        "descricao": "Pleno 😎",
+        "legenda":"Complete 10 níveis",
+        "niveis_para_conquista": 10,
+        "dificuldade_dos_niveis": ["facil", "medio", "dificil"]
+    },
+    {
+        "id":4,
+        "descricao": "Sênior 🤑",
+        "legenda":"Complete 15 níveis",
+        "niveis_para_conquista": 15,
+        "dificuldade_dos_niveis": ["facil", "medio", "dificil"]
+    },
+    {
+        "id":5,
+        "descricao": "Mestre dos níveis 😵",
+        "legenda":"Complete cinco níveis difíceis",
+        "niveis_para_conquista": 5,
+        "dificuldade_dos_niveis": ["dificil"]
+    }
+
+]
