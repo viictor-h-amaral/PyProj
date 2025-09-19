@@ -22,7 +22,6 @@ controle_niveis_exibidos = [0, 10]
 Usuario_Atual = None
 Nivel_Atual_Concluido = False
 
-
 def Exibir_Nivel(nivel_id, raiz):
     """
     Exibe um nível baseado no seu estado (concluído ou incompleto).
@@ -31,8 +30,9 @@ def Exibir_Nivel(nivel_id, raiz):
         nivel_id: ID do nível a ser exibido
         raiz: Janela pai para exibição
     """
-    global Usuario_Atual, Nivel
-    
+    global Usuario_Atual, Nivel, Nivel_Atual_Concluido
+
+    Nivel_Atual_Concluido = False    
     Nivel = crud.Buscar_Nivel(nivel_id)
     
     if crud.Retornar_Se_Nivel_Concluido(Usuario_Atual, nivel_id): 

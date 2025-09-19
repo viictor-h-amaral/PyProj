@@ -54,5 +54,12 @@
         "dificuldade": "dificil",
         "estrutura": 8,
         "criador": "admin"
+    },
+    {
+        "id": 9,
+        "nome": "1x1",
+        "dificuldade": "facil",
+        "estrutura": 9,
+        "criador": "admin"
     }
 ]
