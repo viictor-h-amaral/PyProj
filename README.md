@@ -45,6 +45,9 @@ controle de permissões** (usuário comum e administrador).
     -   Listagem paginada (10 por vez).
     -   Alteração de senhas.
     -   Exclusão de contas.
+-   **Sistema de conquistas**
+    -   Há cinco conquistas padrão no jogo.
+    -   Apenas usuários comuns possuem conquistas.
 -   **Níveis**
     -   Criar níveis customizados (dimensões, peças, validação).
     -   Visualizar níveis concluídos e incompletos.
@@ -105,15 +108,14 @@ usuários.
 ## 🚀 Possíveis Extensões Futuras
 
 -   Exportação e importação de níveis.
--   Sistema de conquistas para usuários.
 -   Editor visual de grupos de peças.
--   Suporte para multiplayer local.
 
 ------------------------------------------------------------------------
 
 ## 👨‍💻 Autoria
 
 Projeto desenvolvido em Python com Tkinter, focado em **aprendizado,
-lógica de jogos e manipulação de interfaces gráficas**.
+lógica de jogos e manipulação de interfaces gráficas e desenvolvimento
+com IA**.
 
 ------------------------------------------------------------------------
